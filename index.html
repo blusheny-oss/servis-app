@@ -1,210 +1,204 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0E1116">
-<meta name="description" content="Сервис — приёмка автомобиля: зоны, фото, отметки повреждений, подпись владельца, акт и смета.">
+<meta name="description" content="Сервис — приёмка автомобиля: неисправности, смета, акт приёма и акт сдачи работ.">
 <title>Сервис — приёмка автомобилей</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
 :root{
   --bg:#0E1116; --bg2:#12161C; --panel:#171C23; --panel2:#1E242C; --line:#2A313B;
   --ink:#EDF1F6; --muted:#96A3B4; --dim:#6C7889;
-  --accent:#FFC24B; --accent-soft:#FFD37A; --accent-ink:#1A1405;
-  --steel:#6FA8DC; --ok:#3BD67F; --bad:#FF6B6B; --info:#5AA9FF;
-  --r:14px; --r-lg:18px;
-  --fs-1:26px; --fs-2:19px; --fs-3:16px; --fs-4:14px; --fs-5:12.5px;
+  --accent:#FFC24B; --accent-2:#FFD37A; --accent-ink:#1A1405;
+  --ok:#3BD67F; --info:#6FA8DC; --bad:#FF6B6B;
+  --r:16px;
 }
-@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 body{
-  background:var(--bg); color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  font-size:var(--fs-4); line-height:1.5; -webkit-font-smoothing:antialiased;
-  padding-bottom:calc(84px + env(safe-area-inset-bottom));
+  background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:15px;line-height:1.45;
+  padding-bottom:calc(225px + env(safe-area-inset-bottom));
 }
-h1,h2,h3{line-height:1.25; letter-spacing:-.01em}
-button,input,textarea,select{font:inherit; color:inherit}
-a{color:inherit; text-decoration:none}
-.money{font-variant-numeric:tabular-nums; letter-spacing:-.02em}
-.muted{color:var(--muted)} .dim{color:var(--dim)}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+h1,h2,h3{letter-spacing:-.02em}
+.wrap{max-width:560px;margin:0 auto;padding:0 14px}
 
-/* chrome */
-.topbar{position:sticky;top:0;z-index:30;background:rgba(14,17,22,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
-.topbar .wrap{display:flex;align-items:center;gap:12px;height:60px}
-.wrap{max-width:900px;margin:0 auto;padding:0 16px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.02em}
-.brand-mark{width:32px;height:32px;border-radius:9px;flex:0 0 auto;background:linear-gradient(160deg,#FFD37A,#E8A21E);color:#1A1405;display:grid;place-items:center;font-weight:800;font-size:15px;box-shadow:0 2px 10px rgba(255,194,75,.25)}
-.brand-sub{font-size:11px;font-weight:600;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
-.topbar .spacer{flex:1}
-.chip-btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);height:34px;padding:0 12px;border-radius:999px;font-size:var(--fs-5);font-weight:600;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
-.chip-btn:hover{color:var(--ink);border-color:#3A4655}
+/* topbar */
+.topbar{position:sticky;top:0;z-index:30;background:rgba(14,17,22,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topbar .row{max-width:560px;margin:0 auto;padding:9px 14px;display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(255,194,75,.12);border:1px solid rgba(255,194,75,.28);flex:0 0 auto}
+.brand-mark svg{width:26px;height:26px;stroke:var(--accent);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.brand-name{font-weight:800;font-size:16px;letter-spacing:-.02em}
+.brand-sub{font-size:11.5px;color:var(--dim);font-weight:600}
 
-/* layout */
-.app{padding-top:18px}
-.section{margin-top:22px}
-.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
-.section-head h2{font-size:var(--fs-5);text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700}
-.section-head .lnk{font-size:var(--fs-5);color:var(--accent-soft);font-weight:600}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+/* tabs */
+.seg{display:flex;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:4px;margin-top:12px}
+.seg a{flex:1;text-align:center;padding:9px 8px;border-radius:10px;font-size:13.5px;font-weight:700;color:var(--muted)}
+.seg a.on{background:var(--panel2);color:var(--ink);box-shadow:inset 0 0 0 1px #33404F}
+.seg .n{color:var(--dim);font-weight:700;margin-left:4px}
 
-/* KPI */
-.kpi-hero{position:relative;overflow:hidden;background:linear-gradient(155deg,#20262F 0%,#171C23 58%,#1A2027 100%);border:1px solid #333B46;border-radius:var(--r-lg);padding:20px 18px 16px}
-.kpi-hero::after{content:"";position:absolute;right:-40px;top:-40px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(255,194,75,.16),transparent 68%)}
-.kpi-hero .label{font-size:var(--fs-5);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
-.kpi-hero .value{font-size:34px;font-weight:800;margin:6px 0 4px;letter-spacing:-.03em}
-.kpi-hero .sub{font-size:var(--fs-5);color:var(--muted)}
-.kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;display:flex;flex-direction:column}
-.kpi .label{font-size:11.5px;color:var(--muted);font-weight:600}
-.kpi .value{font-size:var(--fs-2);font-weight:700;margin-top:auto;padding-top:3px;letter-spacing:-.02em}
-.kpi .value.ok{color:var(--ok)} .kpi .value.info{color:var(--info)} .kpi .value.acc{color:var(--accent)}
+/* head */
+.page-head{display:flex;align-items:center;gap:10px;margin:14px 0 10px}
+.back{width:38px;height:38px;flex:0 0 auto;border-radius:11px;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;color:var(--muted);cursor:pointer}
+.back svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.crumb{font-size:11.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+.page-title{font-size:22px;font-weight:800;letter-spacing:-.03em;margin-top:1px}
+.h1{font-size:24px;font-weight:800;letter-spacing:-.03em}
 
-/* list */
+/* lists */
+.section{margin-top:16px}
+.section-head{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
+.section-head h2{font-size:12.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.dim{color:var(--dim);font-size:12px}
 .list{display:flex;flex-direction:column;gap:8px}
-.item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s}
-.item:hover{border-color:#3B4757;background:var(--panel2)}
-.item-main{min-width:0;flex:1}
-.item-title{font-weight:600;font-size:var(--fs-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item-sub{font-size:var(--fs-5);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-.item-side{text-align:right;flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
-.item-amount{font-weight:700;font-size:var(--fs-3);letter-spacing:-.02em}
-
-/* pills */
-.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:3px 8px;border-radius:6px;white-space:nowrap;border:1px solid transparent}
+.item{display:block;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 13px;cursor:pointer;color:inherit}
+.item:active{background:var(--panel2)}
+.item-row{display:flex;align-items:center;gap:8px}
+.plate{font-size:16.5px;font-weight:800;letter-spacing:-.02em}
+.amount{font-size:16.5px;font-weight:800;margin-left:auto;white-space:nowrap}
+.sub{font-size:13px;color:var(--muted);margin-top:3px}
+.when{font-size:12px;color:var(--dim);margin-top:6px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:3px 7px;border-radius:6px;border:1px solid transparent;white-space:nowrap}
 .pill::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
-.pill.draft{color:var(--dim);border-color:#33404F;background:#1B222C}
-.pill.open{color:var(--accent);background:rgba(255,194,75,.12);border-color:rgba(255,194,75,.3)}
-.pill.signed{color:var(--steel);background:rgba(111,168,220,.12);border-color:rgba(111,168,220,.3)}
-.pill.closed{color:var(--ok);background:rgba(59,214,127,.11);border-color:rgba(59,214,127,.25)}
+.pill.draft{color:var(--accent);background:rgba(255,194,75,.12);border-color:rgba(255,194,75,.3)}
+.pill.signed{color:var(--info);background:rgba(111,168,220,.12);border-color:rgba(111,168,220,.3)}
+.pill.closed{color:var(--ok);background:rgba(59,214,127,.11);border-color:rgba(59,214,127,.26)}
+
+/* meta */
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.meta{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px 11px}
+.meta .k{font-size:10.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.meta .v{font-weight:700;margin-top:2px;font-size:14px}
+.hint{font-size:13px;color:var(--dim);line-height:1.5}
+
+/* groups */
+.grp{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-top:9px;overflow:hidden}
+.grp-head{display:flex;align-items:center;gap:8px;padding:10px 12px}
+.grp-name{font-weight:800;font-size:13.5px}
+.grp-count{color:var(--dim);font-size:12px;font-weight:700}
+.grp-clean{margin-left:auto;border:1px solid var(--line);background:transparent;color:var(--dim);font-size:11.5px;font-weight:700;padding:5px 9px;border-radius:8px;cursor:pointer}
+.grp-clean.on{color:var(--ok);border-color:rgba(59,214,127,.35);background:rgba(59,214,127,.1)}
+.pos{padding:10px 12px;border-top:1px solid var(--line);display:flex;gap:10px;cursor:pointer}
+.pos-name{font-weight:700;font-size:14px}
+.pos-sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+.pos-note{font-size:12px;color:var(--dim);margin-top:3px}
+.pos-price{margin-left:auto;font-weight:800;white-space:nowrap;font-size:14px}
+.tag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:2px 6px;border-radius:5px;margin-right:6px;border:1px solid var(--line);color:var(--muted)}
+.tag.rep{color:var(--info);border-color:rgba(111,168,220,.3)}
+.tag.rep2{color:var(--accent);border-color:rgba(255,194,75,.3)}
 
 /* buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:44px;padding:0 16px;border-radius:11px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);font-weight:600;font-size:var(--fs-4);cursor:pointer;transition:transform .08s,filter .15s,border-color .15s}
-.btn:active{transform:scale(.985)}
-.btn:hover{border-color:#3F4C5C}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
-.btn.primary:hover{filter:brightness(1.05)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:46px;padding:0 16px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);font-weight:700;font-size:14.5px;cursor:pointer}
+.btn:active{transform:scale(.99)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn.ghost{background:transparent}
 .btn.danger{color:var(--bad);border-color:rgba(255,107,107,.35);background:rgba(255,107,107,.07)}
-.btn.sm{height:34px;padding:0 12px;font-size:var(--fs-5);border-radius:9px}
+.btn.sm{height:36px;padding:0 12px;font-size:13px;border-radius:10px}
 .btn.block{width:100%}
+.btn.wide{flex:1 1 100%}
 .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .actions .btn{flex:1 1 auto}
-.actions .btn.wide{flex:1 1 100%}
+
+/* dock */
+.dock{position:fixed;left:0;right:0;bottom:calc(76px + env(safe-area-inset-bottom));z-index:35;pointer-events:none}
+.dock .inner{max-width:560px;margin:0 auto;padding:0 14px;pointer-events:auto}
+.dock .card{background:rgba(23,28,35,.96);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:15px;padding:9px 10px;display:flex;align-items:center;gap:10px;box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.dock .sum{font-weight:800;font-size:15px;line-height:1.15}
+.dock .cnt{font-size:11.5px;color:var(--dim);font-weight:600}
+.dock .btn{margin-left:auto}
 
 /* tabbar */
-.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:40;background:rgba(17,22,29,.95);backdrop-filter:blur(16px);border-top:1px solid var(--line);padding:8px 12px calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:center}
-.tabbar .inner{display:flex;width:100%;max-width:520px;gap:4px}
-.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px;border-radius:11px;color:var(--dim);font-size:10.5px;font-weight:600}
+.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:40;background:rgba(17,22,29,.96);backdrop-filter:blur(16px);border-top:1px solid var(--line);padding:7px 10px calc(7px + env(safe-area-inset-bottom))}
+.tabbar .inner{display:flex;max-width:560px;margin:0 auto;gap:2px}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:11px;color:var(--dim);font-size:10.5px;font-weight:700;white-space:nowrap}
 .tabbar a.on{color:var(--accent);background:rgba(255,194,75,.09)}
 .tabbar svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.tabbar .mid{max-width:64px}
-.tabbar .mid .dot{width:38px;height:38px;margin-top:-14px;border-radius:13px;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);box-shadow:0 6px 16px rgba(255,194,75,.28)}
+.tabbar .mid{max-width:96px;font-size:9.5px}
+.tabbar .mid .dot{width:38px;height:38px;margin-top:-13px;border-radius:13px;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);box-shadow:0 6px 16px rgba(255,194,75,.3)}
 .tabbar .mid .dot svg{width:22px;height:22px;stroke-width:2.4}
 
 /* empty */
-.empty{text-align:center;padding:34px 18px;border:1px dashed #33404F;border-radius:var(--r);background:rgba(23,28,35,.5)}
-.empty h3{font-size:var(--fs-3);margin-bottom:6px}
-.empty p{color:var(--muted);font-size:var(--fs-5);max-width:34ch;margin:0 auto 14px}
-
-/* page head */
-.page-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.back{width:38px;height:38px;flex:0 0 auto;border-radius:11px;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;cursor:pointer;color:var(--muted)}
-.back:hover{color:var(--ink)}
-.back svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.crumb{font-size:var(--fs-5);color:var(--dim);text-transform:uppercase;letter-spacing:.07em;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.page-title{font-size:var(--fs-1);font-weight:800;letter-spacing:-.03em;margin:2px 0 0}
-.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.meta{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.meta .k{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
-.meta .v{font-weight:600;margin-top:2px}
-
-/* car scheme + zones */
-.scheme{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-top:12px}
-.scheme svg{display:block;width:100%;max-width:240px;height:auto;margin:0 auto}
-.zone-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-.zone{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 12px;cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left}
-.zone:hover{border-color:#3B4757;background:var(--panel2)}
-.zone .dot{width:9px;height:9px;border-radius:50%;background:#3A4453;flex:0 0 auto}
-.zone.has .dot{background:var(--accent)}
-.zone .t{flex:1;min-width:0;font-weight:600;font-size:13.5px}
-.zone .c{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-
-/* photos */
-.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.photo{position:relative;aspect-ratio:1;border-radius:11px;overflow:hidden;border:1px solid var(--line);background:#0B0E12}
-.photo img{width:100%;height:100%;object-fit:cover;display:block}
-.photo .del{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:7px;border:none;background:rgba(8,10,13,.72);color:#fff;font-size:14px;line-height:1;cursor:pointer;display:grid;place-items:center}
-.photo.add{display:grid;place-items:center;border-style:dashed;color:var(--dim);cursor:pointer;background:transparent}
-.photo.add:hover{color:var(--accent);border-color:var(--accent)}
-.photo.add span{font-size:22px;line-height:1}
-
-/* marks */
-.marks{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
-.mark{border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:999px;padding:8px 13px;font-size:13px;font-weight:600;cursor:pointer}
-.mark.on{border-color:var(--accent);background:rgba(255,194,75,.14);color:var(--accent)}
+.empty{text-align:center;padding:30px 16px;border:1px dashed #33404F;border-radius:14px;background:rgba(23,28,35,.5)}
+.empty h3{font-size:15px;margin-bottom:5px}
+.empty p{color:var(--muted);font-size:13px;max-width:32ch;margin:0 auto 13px}
 
 /* sheet */
 .backdrop{position:fixed;inset:0;z-index:60;background:rgba(6,8,11,.72);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center}
-.sheet{width:100%;max-width:520px;background:var(--bg2);border:1px solid var(--line);border-radius:20px 20px 0 0;max-height:92vh;display:flex;flex-direction:column;animation:up .22s cubic-bezier(.2,.8,.3,1)}
+.sheet{width:100%;max-width:560px;background:var(--bg2);border:1px solid var(--line);border-radius:20px 20px 0 0;max-height:93vh;display:flex;flex-direction:column;animation:up .22s cubic-bezier(.2,.8,.3,1)}
 @keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
 .grabber{width:38px;height:4px;border-radius:99px;background:#3A4655;margin:9px auto 0;flex:0 0 auto}
-.sheet-head{padding:14px 18px 8px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.sheet-head h3{font-size:var(--fs-2);font-weight:700}
-.sheet-body{padding:6px 18px 4px;overflow:auto;flex:1;min-height:0}
-.sheet-foot{padding:12px 18px calc(16px + env(safe-area-inset-bottom));display:flex;gap:8px;border-top:1px solid var(--line);background:var(--bg2)}
+.sheet-head{padding:12px 16px 8px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sheet-head h3{font-size:17px;font-weight:800}
+.sheet-body{padding:4px 16px 6px;overflow:auto;flex:1;min-height:0}
+.sheet-foot{padding:10px 16px calc(14px + env(safe-area-inset-bottom));display:flex;gap:8px;border-top:1px solid var(--line);background:var(--bg2);flex-wrap:wrap}
 .sheet-foot .btn{flex:1}
 .x{border:none;background:transparent;color:var(--dim);font-size:22px;line-height:1;cursor:pointer;padding:4px 6px}
 
 /* fields */
 .field{margin-bottom:11px}
-.field label{display:block;font-size:var(--fs-5);font-weight:600;color:var(--muted);margin-bottom:5px}
-.field input,.field textarea,.field select{width:100%;background:#0F141A;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:16px;color:var(--ink);outline:none;transition:border-color .15s,box-shadow .15s}
-.field select{appearance:none;-webkit-appearance:none;padding-right:34px;background-repeat:no-repeat;background-position:right 13px center;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%2396A3B4' stroke-width='1.8' stroke-linecap='round'/></svg>")}
-.field textarea{min-height:64px;resize:vertical;line-height:1.5}
+.field label{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:5px}
+.field input,.field textarea,.field select{width:100%;background:#0F141A;border:1px solid var(--line);border-radius:11px;padding:11px 12px;font-size:16px;color:var(--ink);outline:none}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,194,75,.15)}
-.field input.err,.field textarea.err{border-color:var(--bad)}
-.field .msg{font-size:11.5px;color:var(--bad);margin-top:4px;display:none}
-.field.invalid .msg{display:block}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.hint{font-size:var(--fs-5);color:var(--dim);line-height:1.5}
+.field textarea{min-height:56px;resize:vertical;line-height:1.45}
+.field input.err{border-color:var(--bad)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:700;cursor:pointer}
+.chip.on{border-color:var(--accent);background:rgba(255,194,75,.14);color:var(--accent)}
+.chip.add{border-style:dashed;color:var(--dim)}
+
+/* photos */
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:8px}
+.photo{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#0B0E12}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo .del{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:7px;border:none;background:rgba(8,10,13,.75);color:#fff;font-size:14px;line-height:1;cursor:pointer}
+.photo.add{display:grid;place-items:center;border-style:dashed;color:var(--dim);cursor:pointer;background:transparent}
+.photo.add span{font-size:22px;line-height:1}
 
 /* signature */
 .sigwrap{background:#0B0F14;border:1px solid var(--line);border-radius:12px;overflow:hidden;touch-action:none}
-.sigwrap canvas{display:block;width:100%;height:170px;touch-action:none;cursor:crosshair}
+.sigwrap canvas{display:block;width:100%;height:160px;touch-action:none;cursor:crosshair}
 .sigline{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);padding:6px 10px;border-top:1px dashed #2E3A48}
 
 /* toast */
-#toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:90;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
-.toast{background:#232C38;border:1px solid #3A4655;color:var(--ink);padding:10px 16px;border-radius:11px;font-size:var(--fs-5);font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+#toast{position:fixed;left:50%;bottom:calc(170px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:90;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:max-content;max-width:90vw}
+.toast{background:#232C38;border:1px solid #3A4655;color:var(--ink);padding:10px 15px;border-radius:11px;font-size:13px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.45)}
 
 /* print */
 #printRoot{display:none}
 @media print{
-  @page{size:A4;margin:14mm}
+  @page{size:A4;margin:12mm}
   body{background:#fff;padding:0;color:#111}
-  .app,.topbar,.tabbar,#toast,.backdrop{display:none!important}
+  .topbar,.tabbar,.dock,#toast,.backdrop,#app{display:none!important}
   #printRoot{display:block!important}
 }
-.doc{color:#111;font-family:Arial,Helvetica,sans-serif;font-size:11pt;line-height:1.45}
-.doc h1{font-size:15pt;margin-bottom:2px}
-.doc .doc-top{display:flex;justify-content:space-between;border-bottom:2px solid #111;padding-bottom:8px;margin-bottom:14px}
-.doc .who{font-size:9.5pt;color:#333;text-align:right;max-width:46%}
-.doc h2{font-size:11pt;margin:14px 0 6px;text-transform:uppercase;letter-spacing:.05em}
-.doc .kv{display:flex;gap:8px;margin-bottom:3px}
-.doc .kv b{font-weight:700;min-width:120px;display:inline-block}
-.doc table{width:100%;border-collapse:collapse;margin-top:6px}
-.doc th,.doc td{border:1px solid #999;padding:6px 8px;text-align:left;font-size:9.5pt;vertical-align:top}
+.doc{color:#111;font-family:Arial,Helvetica,sans-serif;font-size:10.5pt;line-height:1.4}
+.doc h1{font-size:14pt;margin-bottom:2px}
+.doc .doc-top{display:flex;justify-content:space-between;border-bottom:2px solid #111;padding-bottom:7px;margin-bottom:12px}
+.doc .who{font-size:9pt;color:#333;text-align:right;max-width:46%}
+.doc h2{font-size:10.5pt;margin:13px 0 5px;text-transform:uppercase;letter-spacing:.05em}
+.doc .kv{display:flex;gap:8px;margin-bottom:2px}
+.doc .kv b{font-weight:700;min-width:112px;display:inline-block}
+.doc table{width:100%;border-collapse:collapse;margin-top:5px}
+.doc th,.doc td{border:1px solid #999;padding:5px 7px;text-align:left;font-size:9pt;vertical-align:top}
 .doc th{background:#eee;font-weight:700}
 .doc td.num,.doc th.num{text-align:right;white-space:nowrap}
 .doc tfoot td{font-weight:700;background:#f6f6f6}
-.doc .note{margin-top:12px;font-size:9pt;color:#333;line-height:1.5}
-.doc .signs{display:flex;gap:30px;margin-top:26px;page-break-inside:avoid}
+.doc .totals{margin-top:8px;display:flex;justify-content:flex-end;gap:26px;font-size:10pt}
+.doc .totals b{display:block;font-size:11pt}
+.doc .note{margin-top:10px;font-size:8.8pt;color:#333;line-height:1.45}
+.doc .signs{display:flex;gap:26px;margin-top:24px;page-break-inside:avoid}
 .doc .signs>div{flex:1}
 .doc .signs .ln{border-bottom:1px solid #111;height:44px;display:flex;align-items:flex-end;padding-bottom:2px}
 .doc .signs .ln img{height:42px;display:block}
-.doc .signs .cap{font-size:8.5pt;color:#444;margin-top:4px;display:flex;justify-content:space-between;gap:8px}
+.doc .signs .cap{font-size:8.5pt;color:#444;margin-top:4px;display:flex;justify-content:space-between;gap:6px}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -216,20 +210,20 @@ a{color:inherit; text-decoration:none}
 <body>
 
 <header class="topbar">
-  <div class="wrap">
+  <div class="row">
     <div class="brand">
-      <div class="brand-mark">С</div>
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24"><path d="M3 16h18l-1.4-4.3A2 2 0 0 0 17.7 10H6.3a2 2 0 0 0-1.9 1.7L3 16Z"/><circle cx="7" cy="16.5" r="1.7"/><circle cx="17" cy="16.5" r="1.7"/><path d="M7.5 10 9 7h6l1.5 3"/></svg>
+      </div>
       <div>
-        <div>Сервис</div>
-        <div class="brand-sub" id="tbSub">приёмка автомобилей</div>
+        <div class="brand-name">Сервис</div>
+        <div class="brand-sub">приёмка автомобилей</div>
       </div>
     </div>
-    <div class="spacer"></div>
-    <button class="chip-btn" id="tbPlan" type="button">Тариф</button>
   </div>
 </header>
 
-<main class="app wrap" id="app"></main>
+<main class="wrap" id="app"></main>
 <div id="sheetHost"></div>
 <div id="toast" aria-live="polite"></div>
 <div id="printRoot"></div>
@@ -241,66 +235,82 @@ const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
 const E={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>E[c]);
-const uid=()=>Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-3);
-const nOf=v=>{const x=parseFloat(String(v==null?'':v).replace(',','.').replace(/\s/g,''));return isFinite(x)?x:0;};
-const num=n=>Math.round(Number(n)||0);
-const fmt=n=>num(n).toLocaleString('ru-RU')+' ₽';
+const uid=()=>Math.random().toString(36).slice(2,7)+Date.now().toString(36).slice(-3);
+const nOf=v=>{const x=parseFloat(String(v==null?'':v).replace(/\s/g,'').replace(',','.'));return isFinite(x)?x:0;};
+const money=n=>Math.round(Number(n)||0).toLocaleString('ru-RU')+' ₽';
 const dmy=ts=>ts?new Date(ts).toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
-const dts=ts=>ts?new Date(ts).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'—';
-const plural=(n,a,b,c)=>{const m=Math.abs(n)%100,k=m%10;return m>10&&m<20?c:k===1?a:k>1&&k<5?b:c;};
+const dtm=ts=>ts?new Date(ts).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
+const plur=(n,a,b,c)=>{const m=Math.abs(n)%100,k=m%10;return m>10&&m<20?c:k===1?a:k>1&&k<5?b:c;};
 const fmtPhone=v=>{const d=String(v||'').replace(/\D/g,'');return (d.length===11&&d[0]==='7')?'+7 ('+d.slice(1,4)+') '+d.slice(4,7)+'-'+d.slice(7,9)+'-'+d.slice(9):(v||'');};
 
-/* ================= zones ================= */
-const ZONES=[
-  {k:'front',t:'Передний бампер',x:50,y:99},
-  {k:'hood',t:'Капот',x:50,y:85},
-  {k:'left',t:'Левый борт',x:29,y:62},
-  {k:'roof',t:'Крыша',x:50,y:52},
-  {k:'right',t:'Правый борт',x:71,y:62},
-  {k:'rear',t:'Задний бампер',x:50,y:15},
-  {k:'glass',t:'Стёкла',x:50,y:70},
-  {k:'wheels',t:'Диски и шины',x:18,y:74},
-  {k:'salon',t:'Салон',x:50,y:44}
-];
-const MARKS=['царапина','вмятина','скол','трещина','потёртость','ржавчина'];
+/* ================= constants ================= */
+const GROUPS=['Кузов','Подвеска','Двигатель и охлаждение','Электрика','Прочее'];
+const DAMAGES=['Вмятина','Царапина','Трещина','Течь','Не работает','Разбито'];
+const MODES={repair:'Ремонт',replace:'Замена'};
+const STATUS={draft:'Осмотр',signed:'Подписан',closed:'Выдан'};
+const KEY='priemka.v2', KEY_OLD='priemka.v1';
+const ZONES_OLD={front:'Передний бампер',hood:'Капот',left:'Левый борт',roof:'Крыша',right:'Правый борт',rear:'Задний бампер',glass:'Стёкла',wheels:'Диски и шины',salon:'Салон'};
+const ACT_NOTE='Владелец подтверждает, что перечисленные повреждения зафиксированы при приёмке автомобиля, до начала работ. Стоимость запчастей указана предварительно и уточняется после дефектовки.';
+
+let S=null, draftPhotos=[];
 
 /* ================= photo store ================= */
 const PhotoDB=(()=>{let p=null;
   const open=()=>p||(p=new Promise((res,rej)=>{const r=indexedDB.open('priemka',1);
-    r.onupgradeneeded=()=>{r.result.createObjectStore('p');};
+    r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('p'))r.result.createObjectStore('p');};
     r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);}));
   return{
     async put(id,v){try{const db=await open();return await new Promise((res,rej)=>{const t=db.transaction('p','readwrite');t.objectStore('p').put(v,id);t.oncomplete=()=>res(1);t.onerror=()=>rej(t.error);});}catch(e){return 0;}},
-    async get(id){try{const db=await open();return await new Promise(res=>{const r=db.transaction('p').objectStore('p').get(id);r.onsuccess=()=>res(r.result||null);r.onerror=()=>res(null);});}catch(e){return null;}}
-  };})();
+    async get(id){try{const db=await open();return await new Promise(res=>{const r=db.transaction('p').objectStore('p').get(id);r.onsuccess=()=>res(r.result||null);r.onerror=()=>res(null);});}catch(e){return null;}},
+    async del(id){try{const db=await open();return await new Promise(res=>{const t=db.transaction('p','readwrite');t.objectStore('p').delete(id);t.oncomplete=()=>res(1);t.onerror=()=>res(0);});}catch(e){return 0;}}
+  };
+})();
 
 /* ================= state ================= */
-const KEY='priemka.v1';
-const LIMIT=5;
-const STATUS={draft:'Осмотр',signed:'Подписан',closed:'Выдан'};
-let S=null, draftPhotos=[];
-
-function blank(){return{v:1,pro:false,me:{name:'',phone:''},cars:[]};}
-function load(){try{const raw=localStorage.getItem(KEY);if(raw){S=Object.assign(blank(),JSON.parse(raw));S.me=Object.assign(blank().me,S.me||{});return;}}catch(e){}
-  S=blank();seed();save();}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){toast('Хранилище переполнено');}}
-function seed(){
-  const now=Date.now(),D=86400000;
-  S.me={name:'СТО «Гараж 12»',phone:'+7 916 200-10-10'};
-  S.cars=[
-    {id:'a1',plate:'А 427 ВК 77',model:'Toyota Camry',vin:'XW7BF4FK20S012345',owner:'Сергей П.',phone:'+79161112233',mileage:'84 200',createdAt:now-2*3600e3,status:'draft',note:'Кузовной ремонт после парковки',zones:{left:{photos:[],marks:{'царапина':2,'вмятина':1},note:'Задняя дверь и крыло'}},works:[{id:'w1',title:'Покраска двери',qty:1,price:8000},{id:'w2',title:'Рихтовка крыла',qty:1,price:4500}]},
-    {id:'a2',plate:'М 908 ТС 50',model:'Kia Rio',vin:'Z94CB41AAJR123456',owner:'Ольга Т.',phone:'+79035554433',mileage:'121 500',createdAt:now-D,status:'signed',signedAt:now-D+3600e3,sig:{name:'Ольга Т.',at:now-D+3600e3,data:''},zones:{rear:{photos:[],marks:{'скол':1},note:'Скол на бампере'}},works:[{id:'w3',title:'Замена заднего бампера',qty:1,price:12500}]}
-  ];
+function blank(){return{v:2,me:{name:'',phone:''},groups:GROUPS.slice(),cars:[]};}
+function load(){
+  try{const raw=localStorage.getItem(KEY);if(raw){S=JSON.parse(raw);S.groups=S.groups&&S.groups.length?S.groups:GROUPS.slice();S.me=Object.assign({name:'',phone:''},S.me||{});S.cars=S.cars||[];return;}}catch(e){}
+  try{
+    const oldRaw=localStorage.getItem(KEY_OLD);
+    if(oldRaw){S=migrate(JSON.parse(oldRaw));save();return;}
+  }catch(e){}
+  S=blank();save();
 }
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){toast('Хранилище переполнено');}}
+
+function migrate(o){
+  const s=blank(); s.me=Object.assign(s.me,o.me||{});
+  s.cars=(o.cars||[]).map(c=>{
+    const items=[];
+    (c.works||[]).forEach(w=>items.push(mkItem({group:'Прочее',part:w.title||'Работа',partPrice:nOf(w.price)*(nOf(w.qty)||1)})));
+    Object.keys(c.zones||{}).forEach(k=>{
+      const z=c.zones[k]||{}, zname=ZONES_OLD[k]||k;
+      Object.keys(z.marks||{}).forEach(m=>{for(let i=0;i<(z.marks[m]||0);i++)items.push(mkItem({group:'Кузов',part:zname,damage:m}));});
+      if(z.note)items.push(mkItem({group:'Кузов',part:zname,note:z.note}));
+    });
+    return {id:c.id||'c_'+uid(),plate:c.plate||'',model:c.model||'',vin:c.vin||'',owner:c.owner||'',phone:c.phone||'',
+      mileage:c.mileage||'',note:c.note||'',createdAt:c.createdAt||Date.now(),status:c.status||'draft',
+      items,clean:{},sig:c.sig||null,signedAt:c.signedAt||null,handSig:null,handAt:null,closedAt:c.closedAt||null};
+  });
+  return s;
+}
+function mkItem(p){return{id:'i_'+uid(),group:p.group||'Прочее',part:p.part||'',damage:p.damage||'',note:p.note||'',
+  mode:p.mode||'repair',partPrice:Math.round(nOf(p.partPrice)),labor:Math.round(nOf(p.labor)),photos:p.photos||[]};}
+
 const car=id=>S.cars.find(c=>c.id===id);
-const worksSum=c=>c.works.reduce((s,w)=>s+num(nOf(w.qty)*nOf(w.price)),0);
-const zoneHas=z=>z&&((z.photos&&z.photos.length)||Object.values(z.marks||{}).some(v=>v>0));
-const zonesFilled=c=>ZONES.filter(z=>zoneHas(c.zones[z.k])).length;
-const marksCount=c=>ZONES.reduce((s,z)=>s+Object.values((c.zones[z.k]||{}).marks||{}).reduce((a,b)=>a+(b||0),0),0);
+const itemsOf=c=>c.items||[];
+const partsSum=c=>itemsOf(c).reduce((s,i)=>s+Math.round(i.partPrice||0),0);
+const laborSum=c=>itemsOf(c).reduce((s,i)=>s+Math.round(i.labor||0),0);
+const rowSum=i=>Math.round(i.partPrice||0)+Math.round(i.labor||0);
+const groupsUsed=c=>{const out=[];S.groups.forEach(g=>{if(itemsOf(c).some(i=>i.group===g))out.push(g);});
+  itemsOf(c).forEach(i=>{if(out.indexOf(i.group)<0)out.push(i.group);});return out;};
+const groupsAll=c=>{const out=S.groups.slice();itemsOf(c).forEach(i=>{if(out.indexOf(i.group)<0)out.push(i.group);});return out;};
+const checkedCount=c=>groupsAll(c).filter(g=>c.clean&&c.clean[g]||itemsOf(c).some(i=>i.group===g)).length;
+const allParts=()=>{const set={};S.cars.forEach(c=>itemsOf(c).forEach(i=>{if(i.part)set[i.part]=1;}));return Object.keys(set).sort();};
 
 /* ================= icons ================= */
 const IC={
-  home:'<svg viewBox="0 0 24 24"><path d="M4 17h16l-1.6-5.2A2 2 0 0 0 16.5 10h-9a2 2 0 0 0-1.9 1.8L4 17Z"/><circle cx="7.5" cy="17.5" r="1.6"/><circle cx="16.5" cy="17.5" r="1.6"/></svg>',
+  home:'<svg viewBox="0 0 24 24"><path d="M3 17h18l-1.4-4.3A2 2 0 0 0 17.7 11H6.3a2 2 0 0 0-1.9 1.7L3 17Z"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17" cy="17.5" r="1.6"/></svg>',
   list:'<svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>',
   gear:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.2A1.6 1.6 0 0 0 7 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 13.9H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3.1V3a2 2 0 1 1 4 0v.2a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.2a1.6 1.6 0 0 0-1.4 1.1Z"/></svg>',
   plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
@@ -312,344 +322,417 @@ function tabbar(tab){
   return '<nav class="tabbar"><div class="inner">'
    +'<a href="#/" class="'+(tab==='home'?'on':'')+'">'+IC.home+'<span>Осмотры</span></a>'
    +'<a href="#/cars" class="'+(tab==='cars'?'on':'')+'">'+IC.list+'<span>Машины</span></a>'
-   +'<a href="#" data-act="quick-add" class="mid '+(tab==='new'?'on':'')+'"><span class="dot">'+IC.plus+'</span><span>Машина</span></a>'
+   +'<a href="#" data-act="new-car" class="mid '+(tab==='new'?'on':'')+'"><span class="dot">'+IC.plus+'</span><span>Приём машины</span></a>'
    +'<a href="#/settings" class="'+(tab==='set'?'on':'')+'">'+IC.gear+'<span>Ещё</span></a>'
    +'</div></nav>';
 }
 function render(){
   const parts=(location.hash||'#/').replace(/^#\/?/,'').split('/').filter(Boolean);
   let html='',tab='home';
-  if(!parts.length){html=vHome();}
+  if(!parts.length){html=vDraft();}
+  else if(parts[0]==='signed'){html=vSigned();}
   else if(parts[0]==='cars'){html=vCars();tab='cars';}
   else if(parts[0]==='c'){html=vCar(parts[1]);tab='cars';}
   else if(parts[0]==='settings'){html=vSettings();tab='set';}
-  else{html=vNotFound();}
+  else{html='<div class="empty"><h3>Не найдено</h3><p>Такой страницы нет.</p><a class="btn sm primary" href="#/">На осмотры</a></div>';}
   $('#app').innerHTML=html+tabbar(tab);
-  $('#tbSub').textContent=S.pro?'Pro · без ограничений':('бесплатно · до '+LIMIT+' машин');
   hydratePhotos();
 }
 async function hydratePhotos(){
   for(const img of $$('img[data-ph][data-src="1"]')){
     img.dataset.src='0';
     const src=await PhotoDB.get(img.dataset.ph);
-    if(src) img.src=src;
+    if(src)img.src=src;
   }
 }
-const photoTag=id=>'<img data-ph="'+esc(id)+'" data-src="1" alt="Фото">';
 
 /* ================= views ================= */
-function rowCar(c){
-  const sum=worksSum(c), n=zonesFilled(c), m=marksCount(c);
-  return '<div class="item" data-act="go" data-to="#/c/'+c.id+'" role="button" tabindex="0">'
-   +'<div class="item-main"><div class="item-title">'+esc(c.plate)+'</div>'
-   +'<div class="item-sub">'+esc(c.model||'—')+' · '+n+' '+plural(n,'зона','зоны','зон')+' · '+m+' '+plural(m,'отметка','отметки','отметок')+'</div></div>'
-   +'<div class="item-side"><div class="item-amount money">'+(sum?fmt(sum):'—')+'</div>'
-   +'<span class="pill '+c.status+'">'+STATUS[c.status]+'</span></div></div>';
+function segTabs(cur){
+  const d=S.cars.filter(c=>c.status==='draft').length;
+  const s=S.cars.filter(c=>c.status==='signed').length;
+  return '<div class="seg">'
+   +'<a href="#/" class="'+(cur==='draft'?'on':'')+'">Осмотр<span class="n">'+d+'</span></a>'
+   +'<a href="#/signed" class="'+(cur==='signed'?'on':'')+'">Подписан<span class="n">'+s+'</span></a>'
+   +'</div>';
 }
-function vHome(){
-  const active=S.cars.filter(c=>c.status!=='closed');
-  const signed=S.cars.filter(c=>c.status==='signed');
-  const closed=S.cars.filter(c=>c.status==='closed');
-  const sum=active.reduce((s,c)=>s+worksSum(c),0);
-  let h='<section><div class="kpi-hero">'
-   +'<div class="label">Сейчас в сервисе</div>'
-   +'<div class="value">'+active.length+'</div>'
-   +'<div class="sub">'+signed.length+' с подписанным актом · смет на '+fmt(sum)+'</div>'
-   +'</div>'
-   +'<div class="kpi-row">'
-   +'<div class="kpi"><div class="label">Подписано актов</div><div class="value info">'+S.cars.filter(c=>c.signedAt).length+'</div></div>'
-   +'<div class="kpi"><div class="label">Выдано машин</div><div class="value ok">'+closed.length+'</div></div>'
-   +'</div></section>';
-
-  h+='<div class="section"><div class="section-head"><h2>В работе</h2><span class="dim" style="font-size:12px">'+active.length+'</span></div>';
-  h+=active.length
-    ? '<div class="list">'+active.map(rowCar).join('')+'</div>'
-    : '<div class="empty"><h3>Машин нет</h3><p>Примите первую: госномер, модель, владелец — и обход по зонам.</p><button class="btn primary sm" data-act="new-car">Принять машину</button></div>';
+function rowCar(c){
+  const sum=partsSum(c), n=itemsOf(c).length;
+  return '<div class="item" role="button" tabindex="0" data-act="go" data-to="#/c/'+c.id+'">'
+   +'<div class="item-row"><div class="plate">'+esc(c.plate||'без номера')+'</div><div class="amount">'+(sum?money(sum):'—')+'</div></div>'
+   +'<div class="sub">'+esc(c.model||'Автомобиль')+' · '+n+' '+plur(n,'позиция','позиции','позиций')+'</div>'
+   +'<div class="item-row" style="margin-top:6px"><div class="when" style="margin:0">привезена '+dtm(c.createdAt)+'</div>'
+   +'<div style="margin-left:auto"><span class="pill '+c.status+'">'+STATUS[c.status]+'</span></div></div>'
+   +'</div>';
+}
+function vDraft(){
+  const list=S.cars.filter(c=>c.status==='draft').sort((a,b)=>b.createdAt-a.createdAt);
+  let h='<div class="h1" style="margin-top:14px">Осмотр</div>'+segTabs('draft');
+  h+='<div class="section"><div class="section-head"><h2>Машины на осмотре</h2><span class="dim">'+list.length+'</span></div>';
+  h+=list.length?'<div class="list">'+list.map(rowCar).join('')+'</div>'
+    :'<div class="empty"><h3>Пока пусто</h3><p>Прижмите «Приём машины» — госномер, владелец, и можно записывать неисправности.</p><button class="btn primary sm" data-act="new-car">Принять машину</button></div>';
   h+='</div>';
-
-  if(closed.length){
-    h+='<div class="section"><div class="section-head"><h2>Выдано</h2></div><div class="list">'+closed.slice(0,4).map(rowCar).join('')+'</div></div>';
-  }
+  return h;
+}
+function vSigned(){
+  const list=S.cars.filter(c=>c.status==='signed').sort((a,b)=>(b.signedAt||0)-(a.signedAt||0));
+  let h='<div class="h1" style="margin-top:14px">Подписан</div>'+segTabs('signed');
+  h+='<div class="section"><div class="section-head"><h2>Акт подписан, машина не выдана</h2><span class="dim">'+list.length+'</span></div>';
+  h+=list.length?'<div class="list">'+list.map(rowCar).join('')+'</div>'
+    :'<div class="empty"><h3>Пусто</h3><p>Сюда машины попадают сами, как только владелец подписал акт приёма.</p></div>';
+  h+='</div>';
   return h;
 }
 function vCars(){
-  let h='<div class="page-head"><div><div class="crumb">Машины</div><div class="page-title">Все осмотры</div></div><div style="flex:1"></div>'
-   +'<button class="chip-btn" data-act="new-car">+ машина</button></div>';
-  if(!S.cars.length) return h+'<div class="empty"><h3>Пусто</h3><p>Каждая машина — отдельная карточка с фото и подписью владельца.</p><button class="btn primary sm" data-act="new-car">Принять машину</button></div>';
-  return h+'<div class="list">'+S.cars.map(rowCar).join('')+'</div>';
+  const list=S.cars.slice().sort((a,b)=>b.createdAt-a.createdAt);
+  let h='<div class="page-head"><div><div class="crumb">Машины</div><div class="page-title">Все машины</div></div>'
+    +'<div style="flex:1"></div><button class="btn sm primary" data-act="new-car">+ машина</button></div>';
+  if(!list.length)return h+'<div class="empty"><h3>Пусто</h3><p>Здесь будут все машины: на осмотре, подписанные и выданные.</p></div>';
+  h+='<div class="field" style="margin-bottom:10px"><input id="q" type="search" inputmode="search" placeholder="Поиск: номер, марка, владелец"></div>';
+  h+='<div class="list" id="carsList">'+list.map(c=>{
+    const sum=partsSum(c);
+    return '<div class="item" data-q="'+esc((c.plate+' '+c.model+' '+c.owner).toLowerCase())+'" role="button" tabindex="0" data-act="go" data-to="#/c/'+c.id+'">'
+     +'<div class="item-row"><div class="plate">'+esc(c.plate||'без номера')+'</div><div class="amount">'+(sum?money(sum):'—')+'</div></div>'
+     +'<div class="sub">'+esc(c.model||'Автомобиль')+' · '+itemsOf(c).length+' '+plur(itemsOf(c).length,'позиция','позиции','позиций')+'</div>'
+     +'<div class="item-row" style="margin-top:6px"><div class="when" style="margin:0">'+dtm(c.createdAt)+'</div>'
+     +'<div style="margin-left:auto"><span class="pill '+c.status+'">'+STATUS[c.status]+'</span></div></div></div>';
+  }).join('')+'</div>';
+  return h;
 }
-
-function schemeSVG(c){
-  const dot=(z)=>{
-    const on=zoneHas(c.zones[z.k]);
-    return '<g><circle cx="'+z.x+'" cy="'+z.y+'" r="4.6" fill="'+(on?'#FFC24B':'#1E242C')+'" stroke="'+(on?'#FFC24B':'#3A4453')+'" stroke-width="1.4"/>'
-      +(on?'<circle cx="'+z.x+'" cy="'+z.y+'" r="8" fill="none" stroke="#FFC24B" stroke-opacity=".35" stroke-width="1.2"/>':'')+'</g>';
-  };
-  return '<svg viewBox="0 0 100 112" role="img" aria-label="Схема автомобиля">'
-   +'<rect x="20" y="30" width="7" height="16" rx="3.5" fill="#2A313B"/>'
-   +'<rect x="73" y="30" width="7" height="16" rx="3.5" fill="#2A313B"/>'
-   +'<rect x="20" y="70" width="7" height="16" rx="3.5" fill="#2A313B"/>'
-   +'<rect x="73" y="70" width="7" height="16" rx="3.5" fill="#2A313B"/>'
-   +'<path d="M50 6 C62 6 72 14 74 24 L76 40 L76 84 C76 94 68 102 58 104 L42 104 C32 102 24 94 24 84 L24 40 L26 24 C28 14 38 6 50 6 Z" fill="#1A2029" stroke="#3A4453" stroke-width="1.6"/>'
-   +'<path d="M32 40 L40 30 L60 30 L68 40 Z" fill="#0F141A" stroke="#39424F" stroke-width="1.2"/>'
-   +'<path d="M32 76 L40 86 L60 86 L68 76 Z" fill="#0F141A" stroke="#39424F" stroke-width="1.2"/>'
-   +'<rect x="32" y="40" width="36" height="36" rx="7" fill="#1E252E" stroke="#39424F" stroke-width="1.2"/>'
-   +'<path d="M26 24 L26 84" stroke="#39424F" stroke-width="1" stroke-dasharray="3 4"/>'
-   +'<path d="M74 24 L74 84" stroke="#39424F" stroke-width="1" stroke-dasharray="3 4"/>'
-   +ZONES.map(dot).join('')+'</svg>';
-}
-
 function vCar(id){
-  const c=car(id); if(!c) return vNotFound();
-  const sum=worksSum(c);
+  const c=car(id);
+  if(!c)return '<div class="empty"><h3>Машина не найдена</h3><p>Возможно, карточку удалили.</p><a class="btn sm" href="#/cars">К списку</a></div>';
+  const sum=partsSum(c), cnt=itemsOf(c).length;
   let h='<div class="page-head"><button class="back" data-act="back" aria-label="Назад">'+IC.back+'</button>'
    +'<div style="min-width:0"><div class="crumb">'+esc(c.model||'Автомобиль')+'</div>'
-   +'<div class="page-title" style="font-size:22px">'+esc(c.plate)+'</div></div>'
+   +'<div class="page-title">'+esc(c.plate||'без номера')+'</div></div>'
    +'<div style="flex:1"></div><span class="pill '+c.status+'">'+STATUS[c.status]+'</span></div>';
 
-  h+='<div class="meta-grid" style="margin-top:0">'
+  h+='<div class="meta-grid">'
+   +'<div class="meta"><div class="k">Привезена</div><div class="v">'+dmy(c.createdAt)+'</div></div>'
+   +'<div class="meta"><div class="k">Время</div><div class="v">'+new Date(c.createdAt).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})+'</div></div>'
    +'<div class="meta"><div class="k">Владелец</div><div class="v">'+esc(c.owner||'—')+'</div></div>'
-   +'<div class="meta"><div class="k">Телефон</div><div class="v money">'+esc(fmtPhone(c.phone)||'—')+'</div></div>'
-   +'<div class="meta"><div class="k">Пробег</div><div class="v money">'+esc(c.mileage||'—')+'</div></div>'
-   +'<div class="meta"><div class="k">Смета</div><div class="v money">'+(sum?fmt(sum):'—')+'</div></div>'
+   +'<div class="meta"><div class="k">Телефон</div><div class="v">'+esc(fmtPhone(c.phone)||'—')+'</div></div>'
+   +'<div class="meta"><div class="k">Пробег</div><div class="v">'+esc(c.mileage||'—')+'</div></div>'
+   +'<div class="meta"><div class="k">Осмотрено</div><div class="v">'+checkedCount(c)+' из '+groupsAll(c).length+' групп</div></div>'
    +'</div>';
 
-  if(c.note) h+='<div class="hint" style="margin-top:10px">'+esc(c.note)+'</div>';
+  if(c.note)h+='<div class="hint" style="margin-top:10px">'+esc(c.note)+'</div>';
 
-  h+='<div class="scheme">'+schemeSVG(c)+'</div>';
+  h+='<div class="section"><div class="section-head"><h2>Неисправности</h2><span class="dim">'+checkedCount(c)+' из '+groupsAll(c).length+' групп</span>'
+   +'<button class="btn sm ghost" style="margin-left:auto" data-act="add-item" data-id="'+c.id+'">+ позиция</button></div>';
 
-  h+='<div class="section" style="margin-top:14px"><div class="section-head"><h2>Зоны осмотра</h2><span class="dim" style="font-size:12px">'+zonesFilled(c)+' из '+ZONES.length+'</span></div>'
-   +'<div class="zone-grid">'+ZONES.map(z=>{
-      const zz=c.zones[z.k]||{}; const on=zoneHas(zz);
-      const cnt=Object.values(zz.marks||{}).reduce((a,b)=>a+(b||0),0);
-      const ph=(zz.photos||[]).length;
-      return '<button class="zone '+(on?'has':'')+'" data-act="zone" data-id="'+c.id+'" data-z="'+z.k+'">'
-       +'<span class="dot"></span><span class="t">'+z.t+'</span>'
-       +'<span class="c">'+(cnt?cnt+'✕':ph?'фото':'')+'</span></button>';
-    }).join('')+'</div></div>';
-
-  h+='<div class="section"><div class="section-head"><h2>Смета</h2><button class="lnk" data-act="add-work" data-id="'+c.id+'">+ работа</button></div>';
-  h+=c.works.length?'<div class="list">'+c.works.map(w=>'<div class="item" data-act="edit-work" data-id="'+c.id+'" data-w="'+w.id+'"><div class="item-main"><div class="item-title">'+esc(w.title)+'</div><div class="item-sub">'+w.qty+' × '+fmt(w.price)+'</div></div><div class="item-side"><div class="item-amount money">'+fmt(num(nOf(w.qty)*nOf(w.price)))+'</div></div></div>').join('')+'</div>'
-    :'<div class="hint">Пока пусто. Добавьте работы, чтобы владелец видел сумму до ремонта.</div>';
-  h+='</div>';
-
-  h+='<div class="actions">';
-  if(c.status!=='closed'){
-    h+='<button class="btn primary wide" data-act="sign" data-id="'+c.id+'">'+(c.signedAt?'Переподписать акт':'Подписать акт')+'</button>';
-    h+='<button class="btn ghost" data-act="print" data-id="'+c.id+'">Акт PDF</button>';
-    h+='<button class="btn ghost" data-act="share" data-id="'+c.id+'">Отправить в MAX</button>';
-    h+='<button class="btn ghost wide" data-act="close-car" data-id="'+c.id+'">Выдать машину</button>';
-  } else {
-    h+='<button class="btn ghost wide" data-act="print" data-id="'+c.id+'">Акт PDF</button>';
-    h+='<button class="btn ghost" data-act="reopen" data-id="'+c.id+'">Вернуть в работу</button>';
-    h+='<button class="btn danger" data-act="del-car" data-id="'+c.id+'">Удалить</button>';
+  const groups=groupsAll(c);
+  if(!cnt){
+    h+='<div class="empty"><h3>Осмотр не начат</h3><p>Записывайте по узлам: что нашли, ремонт или замена, сколько стоит запчасть.</p><button class="btn primary sm" data-act="add-item" data-id="'+c.id+'">Добавить первую</button></div>';
+  }else{
+    groups.forEach(g=>{
+      const its=itemsOf(c).filter(i=>i.group===g);
+      const clean=c.clean&&c.clean[g];
+      const gsum=its.reduce((s,i)=>s+Math.round(i.partPrice||0),0);
+      h+='<div class="grp"><div class="grp-head"><div class="grp-name">'+esc(g)+'</div>'
+       +(its.length?'<div class="grp-count">'+its.length+' · '+money(gsum)+'</div>':'<div class="grp-count">пусто</div>')
+       +(its.length?'':'<button class="grp-clean '+(clean?'on':'')+'" data-act="clean" data-id="'+c.id+'" data-g="'+esc(g)+'">'+(clean?'✓ осмотрено':'чисто')+'</button>')+'</div>'
+       +its.map(i=>{
+          const ph=(i.photos||[]).length;
+          return '<div class="pos" data-act="edit-item" data-id="'+c.id+'" data-i="'+i.id+'">'
+           +'<div style="min-width:0;flex:1"><div class="pos-name">'+esc(i.part||'—')+'</div>'
+           +'<div class="pos-sub"><span class="tag '+(i.mode==='replace'?'rep2':'rep')+'">'+MODES[i.mode]+'</span>'
+           +esc(i.damage||'')+(ph?' · '+ph+' фото':'')+'</div>'
+           +(i.note?'<div class="pos-note">'+esc(i.note)+'</div>':'')+'</div>'
+           +'<div class="pos-price">'+money(i.partPrice)+'</div></div>';
+        }).join('')
+       +'</div>';
+    });
   }
   h+='</div>';
 
-  if(c.signedAt) h+='<div class="hint" style="margin-top:12px">Акт подписан '+dts(c.signedAt)+(c.sig&&c.sig.name?' · '+esc(c.sig.name):'')+'</div>';
+  h+='<div class="actions">';
+  h+='<button class="btn ghost wide" data-act="print-accept" data-id="'+c.id+'">Акт приёма PDF</button>';
+  h+='<button class="btn ghost" data-act="share" data-id="'+c.id+'">Отправить в MAX</button>';
+  if(c.status==='signed'){
+    h+='<button class="btn primary" data-act="print-hand" data-id="'+c.id+'">Акт сдачи PDF</button>';
+  }
+  if(c.status==='closed'){
+    h+='<button class="btn ghost" data-act="print-hand" data-id="'+c.id+'">Акт сдачи PDF</button>';
+    h+='<button class="btn ghost" data-act="reopen" data-id="'+c.id+'">Вернуть в работу</button>';
+  }
+  h+='</div>';
+  if(c.signedAt)h+='<div class="hint" style="margin-top:10px">Акт приёма подписан '+dtm(c.signedAt)+(c.sig&&c.sig.name?' · '+esc(c.sig.name):'')+'</div>';
+  if(c.handAt)h+='<div class="hint" style="margin-top:4px">Выдана '+dtm(c.handAt)+(c.handSig&&c.handSig.name?' · '+esc(c.handSig.name):'')+'</div>';
+
+  h+='<div class="dock"><div class="inner"><div class="card"><div><div class="sum">'+money(sum)+'</div>'
+   +'<div class="cnt">'+cnt+' '+plur(cnt,'позиция','позиции','позиций')+' · без работы мастера</div></div>'
+   +(c.status==='draft'
+      ?'<button class="btn primary sm" data-act="sign" data-id="'+c.id+'">Подписать акт</button>'
+      :(c.status==='signed'?'<button class="btn primary sm" data-act="hand" data-id="'+c.id+'">Выдать</button>':''))
+   +'</div></div></div>';
   return h;
 }
-
 function vSettings(){
   const m=S.me;
   let h='<div class="page-head"><div><div class="crumb">Ещё</div><div class="page-title">Настройки</div></div></div>';
-  h+='<div class="card"><div class="hint" style="margin-bottom:10px">Сервис — эти данные попадут в акт приёма-передачи.</div>'
+  h+='<div class="section"><div class="section-head"><h2>Сервис</h2></div>'
    +'<div class="field"><label for="m_name">Название сервиса</label><input id="m_name" value="'+esc(m.name)+'" placeholder="СТО «Гараж 12»"></div>'
-   +'<div class="field" style="margin-bottom:0"><label for="m_phone">Телефон</label><input id="m_phone" inputmode="tel" value="'+esc(m.phone)+'" placeholder="+7 …"></div>'
-   +'<button class="btn ghost block" style="margin-top:12px" data-act="save-me">Сохранить</button></div>';
-
-  h+='<div class="section"><div class="section-head"><h2>Тариф</h2></div>'
-   +'<div class="card" style="background:linear-gradient(160deg,#241F12,#171C23 62%);border-color:#4A3D22">'
-   +'<div style="font-weight:700;font-size:16px">'+(S.pro?'Pro активен':'Бесплатно · '+S.cars.length+' из '+LIMIT+' машин')+'</div>'
-   +'<div class="hint" style="margin-top:4px">Один спор о царапине стоит дороже года подписки.</div>'
-   +'<div style="display:flex;align-items:flex-end;gap:8px;margin:14px 0"><span style="font-size:30px;font-weight:800;letter-spacing:-.03em">1 490 ₽</span><span class="hint" style="padding-bottom:4px">/ месяц</span></div>'
-   +'<button class="btn primary block" data-act="'+(S.pro?'':'activate-pro')+'">'+(S.pro?'Pro включён (демо)':'Включить Pro — демо')+'</button>'
-   +'<div class="hint" style="margin-top:8px">Демо-режим: реальная оплата не подключена.</div></div></div>';
-
-  h+='<div class="section"><div class="section-head"><h2>Данные</h2></div><div class="list">'
-   +'<button class="item" data-act="export"><div class="item-main"><div class="item-title">Скачать резервную копию</div><div class="item-sub">JSON со всеми машинами</div></div></button>'
-   +'<button class="item" data-act="import"><div class="item-main"><div class="item-title">Загрузить копию</div><div class="item-sub">Заменит текущие данные</div></div></button>'
-   +'<button class="item" data-act="reset"><div class="item-main"><div class="item-title" style="color:var(--bad)">Очистить всё</div><div class="item-sub">Удаляет данные с устройства</div></div></button>'
-   +'</div></div>';
-  h+='<div class="section"><div class="hint">Сервис · прототип v1. Данные в браузере (localStorage + IndexedDB), никуда не отправляются.</div></div>';
+   +'<div class="field"><label for="m_phone">Телефон</label><input id="m_phone" inputmode="tel" value="'+esc(m.phone)+'" placeholder="+7 916 200-10-10"></div>'
+   +'<button class="btn primary block" data-act="save-me">Сохранить</button></div>';
+  h+='<div class="section"><div class="section-head"><h2>Данные</h2></div>'
+   +'<div class="hint" style="margin-bottom:10px">Всё хранится на этом телефоне. Фото лежат в приложении и в галерею не попадают.</div>'
+   +'<div class="actions" style="margin-top:0"><button class="btn ghost" data-act="export">Скачать копию</button>'
+   +'<button class="btn ghost" data-act="import">Загрузить копию</button></div>'
+   +'<button class="btn danger block" style="margin-top:10px" data-act="reset">Удалить все машины</button></div>';
+  h+='<div class="hint" style="margin-top:16px;text-align:center">Сервис · приёмка автомобилей</div>';
   return h;
 }
-function vNotFound(){return '<div class="empty" style="margin-top:30px"><h3>Не найдено</h3><p>Машина не существует.</p><a class="btn ghost sm" href="#/">На главную</a></div>';}
 
-/* ================= sheet ================= */
-let sheetCount=0;
+/* ================= sheets ================= */
+let sheetCloser=null;
 function openSheet(o){
   const host=$('#sheetHost');
-  const bd=document.createElement('div');
-  bd.className='backdrop';
-  bd.innerHTML='<div class="sheet" role="dialog" aria-modal="true">'
+  host.innerHTML='<div class="backdrop"><div class="sheet" role="dialog" aria-modal="true">'
    +'<div class="grabber"></div>'
-   +'<div class="sheet-head"><h3>'+esc(o.title||'')+'</h3><button class="x" data-act="close-sheet" aria-label="Закрыть">×</button></div>'
-   +'<div class="sheet-body">'+(o.body||'')+'</div>'
-   +(o.foot?'<div class="sheet-foot">'+o.foot+'</div>':'')+'</div>';
-  host.appendChild(bd);sheetCount++;
-  document.body.style.overflow='hidden';
-  bd.addEventListener('mousedown',e=>{if(e.target===bd)closeSheet(bd);});
-  const close=()=>closeSheet(bd);
-  if(o.onMount)o.onMount(bd,close);
-  hydratePhotos();
-  return {el:bd,close};
+   +'<div class="sheet-head"><h3>'+o.title+'</h3><button class="x" data-act="close-sheet" aria-label="Закрыть">×</button></div>'
+   +'<div class="sheet-body">'+o.body+'</div>'
+   +(o.foot?'<div class="sheet-foot">'+o.foot+'</div>':'')
+   +'</div></div>';
+  sheetCloser=()=>{host.innerHTML='';sheetCloser=null;};
+  const bd=$('.backdrop',host);
+  bd.addEventListener('click',e=>{if(e.target===bd)sheetCloser&&sheetCloser();});
+  if(o.onMount)o.onMount($('.sheet-body',host),sheetCloser);
 }
-function closeSheet(bd){if(!bd||!bd.parentNode)return;bd.remove();sheetCount=Math.max(0,sheetCount-1);if(!sheetCount)document.body.style.overflow='';}
-function closeTop(){const all=$$('#sheetHost .backdrop');if(all.length)closeSheet(all[all.length-1]);}
-function toast(msg){const box=$('#toast');const t=document.createElement('div');t.className='toast';t.textContent=msg;box.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .25s';setTimeout(()=>t.remove(),260);},2200);}
-async function copyText(txt,okMsg){try{await navigator.clipboard.writeText(txt);toast(okMsg||'Скопировано');}catch(e){const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(okMsg||'Скопировано');}catch(_){toast('Не удалось скопировать');}ta.remove();}}
+function closeTop(){if(sheetCloser)sheetCloser();}
 
-/* ================= photos ================= */
-function pickPhotos(){
-  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;
-  inp.addEventListener('change',async()=>{
-    const files=Array.from(inp.files||[]).slice(0,6-draftPhotos.length);
-    if(!files.length)return;
-    for(const f of files){try{const data=await compress(f);const id='ph_'+uid();await PhotoDB.put(id,data);draftPhotos.push(id);}catch(e){toast('Фото не прочиталось');}}
-    const box=$('#z_photos');if(box)renderDraftPhotos(box);
+function carForm(id){
+  const c=id?car(id):null;
+  const now=Date.now();
+  openSheet({
+    title:id?'Данные машины':'Принять машину',
+    body:'<div class="field"><label for="c_plate">Госномер</label><input id="c_plate" value="'+esc(c?c.plate:'')+'" placeholder="А 427 ВК 77" autocapitalize="characters" style="text-transform:uppercase"></div>'
+      +'<div class="grid2"><div class="field"><label for="c_model">Марка и модель</label><input id="c_model" value="'+esc(c?c.model:'')+'" placeholder="Toyota Camry"></div>'
+      +'<div class="field"><label for="c_mileage">Пробег</label><input id="c_mileage" inputmode="numeric" value="'+esc(c?c.mileage:'')+'" placeholder="84 200"></div></div>'
+      +'<div class="field"><label for="c_date">Дата привоза</label><input id="c_date" type="datetime-local" value="'+toLocalInput(c?c.createdAt:now)+'"></div>'
+      +'<div class="field"><label for="c_vin">VIN (необязательно)</label><input id="c_vin" value="'+esc(c?c.vin:'')+'" placeholder="XW7BF4FK20S012345" maxlength="17" autocapitalize="characters" style="text-transform:uppercase"></div>'
+      +'<div class="grid2"><div class="field"><label for="c_owner">Владелец</label><input id="c_owner" value="'+esc(c?c.owner:'')+'" placeholder="Сергей П."></div>'
+      +'<div class="field"><label for="c_phone">Телефон</label><input id="c_phone" inputmode="tel" value="'+esc(c?c.phone:'')+'" placeholder="+7 916 111-22-33"></div></div>'
+      +'<div class="field" style="margin-bottom:2px"><label for="c_note">Что случилось / жалобы</label><input id="c_note" value="'+esc(c?c.note:'')+'" placeholder="Въехал грузовик, битые двери, радиатор"></div>',
+    foot:'<button class="btn ghost" data-act="close-sheet">Отмена</button><button class="btn primary" data-act="save-car" data-id="'+(c?c.id:'')+'">'+(c?'Сохранить':'Принять')+'</button>',
+    onMount:(bd)=>{
+      const plate=$('#c_plate',bd);
+      plate.addEventListener('input',()=>{plate.value=plate.value.toUpperCase();});
+    }
   });
+}
+function toLocalInput(ts){
+  const d=new Date(ts||Date.now());
+  const p=n=>String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'T'+p(d.getHours())+':'+p(d.getMinutes());
+}
+
+function itemForm(cid,iid,presetGroup){
+  const c=car(cid);if(!c)return;
+  const it=iid?itemsOf(c).find(i=>i.id===iid):null;
+  draftPhotos=it?(it.photos||[]).slice():[];
+  const groups=S.groups.slice();
+  let group=(it&&it.group)||presetGroup||groups[0]||'Прочее';
+  let damage=it?it.damage:'';
+  let mode=it?it.mode:'repair';
+  const parts=allParts();
+
+  const body=''
+   +'<div class="field"><label>Узел / группа</label><div class="chips" id="i_groups">'
+   +groups.map(g=>'<button type="button" class="chip '+(g===group?'on':'')+'" data-g="'+esc(g)+'">'+esc(g)+'</button>').join('')
+   +'<button type="button" class="chip add" id="i_newgroup">+ группа</button></div>'
+   +'<div id="i_newgroup_box" style="display:none;margin-top:8px"><input id="i_newgroup_name" placeholder="Название группы"></div></div>'
+   +'<div class="field"><label for="i_part">Что именно</label><input id="i_part" list="i_parts" value="'+esc(it?it.part:'')+'" placeholder="Радиатор / дверь передняя правая"><datalist id="i_parts">'+parts.map(p=>'<option value="'+esc(p)+'"></option>').join('')+'</datalist></div>'
+   +'<div class="field"><label>Повреждение</label><div class="chips" id="i_damages">'
+   +DAMAGES.map(d=>'<button type="button" class="chip '+(d===damage?'on':'')+'" data-dmg="'+esc(d)+'">'+esc(d)+'</button>').join('')
+   +'</div><input id="i_damage_custom" style="margin-top:7px" value="'+esc(DAMAGES.indexOf(damage)<0?damage:'')+'" placeholder="Своё описание словами"></div>'
+   +'<div class="field"><label>Ремонт или замена</label><div class="chips" id="i_mode">'
+   +'<button type="button" class="chip '+(mode==='repair'?'on':'')+'" data-mode="repair">Ремонт</button>'
+   +'<button type="button" class="chip '+(mode==='replace'?'on':'')+'" data-mode="replace">Замена</button></div></div>'
+   +'<div class="grid2"><div class="field"><label for="i_price">Запчасть, ₽</label><input id="i_price" inputmode="numeric" value="'+(it?it.partPrice:'')+'" placeholder="0"></div>'
+   +'<div class="field"><label for="i_labor">Работа мастера, ₽</label><input id="i_labor" inputmode="numeric" value="'+(it?it.labor:'')+'" placeholder="0"></div></div>'
+   +'<div class="field"><label for="i_note">Оценка словами</label><textarea id="i_note" placeholder="Что видно, что меняем">'+esc(it?it.note:'')+'</textarea></div>'
+   +'<div class="field"><label>Фото</label><div class="photos" id="i_photos"></div></div>';
+
+  const foot=(it?'<button class="btn danger" data-act="del-item" data-id="'+cid+'" data-i="'+it.id+'">Удалить</button>':'')
+   +'<button class="btn ghost" data-act="close-sheet">Отмена</button>'
+   +'<button class="btn '+(it?'primary':'ghost')+'" data-act="save-item" data-id="'+cid+'" data-i="'+(it?it.id:'')+'" data-cont="0">'+(it?'Сохранить':'Добавить')+'</button>'
+   +(!it?'<button class="btn primary wide" data-act="save-item" data-id="'+cid+'" data-i="" data-cont="1">Добавить и продолжить</button>':'');
+
+  openSheet({
+    title:it?'Позиция осмотра':'Новая неисправность',
+    body, foot,
+    onMount:(bd)=>{
+      renderDraftPhotos($('#i_photos',bd));
+      $('#i_newgroup',bd).onclick=()=>{
+        const box=$('#i_newgroup_box',bd);
+        box.style.display=box.style.display==='none'?'block':'none';
+        if(box.style.display==='block')$('#i_newgroup_name',bd).focus();
+      };
+      $('#i_groups',bd).addEventListener('click',e=>{
+        const b=e.target.closest('[data-g]');if(!b)return;
+        group=b.dataset.g;
+        $$('#i_groups .chip',bd).forEach(x=>x.classList.toggle('on',x.dataset.g===group));
+      });
+      $('#i_damages',bd).addEventListener('click',e=>{
+        const b=e.target.closest('[data-dmg]');if(!b)return;
+        damage=(damage===b.dataset.dmg)?'':b.dataset.dmg;
+        $('#i_damage_custom',bd).value='';
+        $$('#i_damages .chip',bd).forEach(x=>x.classList.toggle('on',x.dataset.dmg===damage));
+      });
+      $('#i_damage_custom',bd).addEventListener('input',e=>{
+        damage=e.target.value.trim();
+        $$('#i_damages .chip',bd).forEach(x=>x.classList.remove('on'));
+      });
+      $('#i_mode',bd).addEventListener('click',e=>{
+        const b=e.target.closest('[data-mode]');if(!b)return;
+        mode=b.dataset.mode;
+        $$('#i_mode .chip',bd).forEach(x=>x.classList.toggle('on',x.dataset.mode===mode));
+      });
+      bd.dataset.group=group;bd.dataset.mode=mode;
+      bd._getState=()=>({group:$('#i_groups',bd).querySelector('.chip.on')?$('#i_groups',bd).querySelector('.chip.on').dataset.g:group,
+        part:$('#i_part',bd).value.trim(),
+        damage:($('#i_damage_custom',bd).value.trim()||(($('#i_damages',bd).querySelector('.chip.on')||{}).dataset||{}).dmg||''),
+        mode:(($('#i_mode',bd).querySelector('.chip.on')||{}).dataset||{}).mode||'repair',
+        partPrice:$('#i_price',bd).value,labor:$('#i_labor',bd).value,note:$('#i_note',bd).value,
+        newGroup:$('#i_newgroup_name',bd)?$('#i_newgroup_name',bd).value.trim():''});
+    }
+  });
+}
+function renderDraftPhotos(host){
+  if(!host)return;
+  host.innerHTML=draftPhotos.map((id,i)=>'<div class="photo"><img data-ph="'+esc(id)+'" data-src="1" alt=""><button class="del" data-act="del-photo" data-i="'+i+'" aria-label="Удалить">×</button></div>').join('')
+   +'<div class="photo add" data-act="add-photo"><span>+</span></div>';
+  hydratePhotos();
+}
+function pickPhotos(){
+  const inp=document.createElement('input');
+  inp.type='file';inp.accept='image/*';inp.multiple=true;
+  inp.onchange=async()=>{
+    const files=Array.from(inp.files||[]);
+    for(const f of files){
+      try{const data=await compress(f);const id='ph_'+uid();await PhotoDB.put(id,data);draftPhotos.push(id);}catch(e){toast('Фото не прочиталось');}
+    }
+    renderDraftPhotos($('#i_photos'));
+  };
   inp.click();
 }
-function compress(file,max,quality){
-  max=max||1000;quality=quality||0.62;
+function compress(file,maxW=1400,quality=.72){
   return new Promise((res,rej)=>{
-    const url=URL.createObjectURL(file);const img=new Image();
-    img.onload=()=>{
-      const sc=Math.min(1,max/Math.max(img.width,img.height));
-      const w=Math.max(1,Math.round(img.width*sc)),hh=Math.max(1,Math.round(img.height*sc));
-      const cv=document.createElement('canvas');cv.width=w;cv.height=hh;
-      cv.getContext('2d').drawImage(img,0,0,w,hh);URL.revokeObjectURL(url);
-      try{res(cv.toDataURL('image/jpeg',quality));}catch(e){rej(e);}
+    const fr=new FileReader();
+    fr.onload=()=>{
+      const img=new Image();
+      img.onload=()=>{
+        const k=Math.min(1,maxW/img.width), w=Math.round(img.width*k), hh=Math.round(img.height*k);
+        const cv=document.createElement('canvas');cv.width=w;cv.height=hh;
+        cv.getContext('2d').drawImage(img,0,0,w,hh);
+        try{res(cv.toDataURL('image/jpeg',quality));}catch(e){rej(e);}
+      };
+      img.onerror=rej;img.src=fr.result;
     };
-    img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('img'));};
-    img.src=url;
-  });
-}
-function renderDraftPhotos(box){
-  box.innerHTML=draftPhotos.map((id,i)=>'<div class="photo">'+photoTag(id)+'<button class="del" data-act="del-photo" data-i="'+i+'" aria-label="Удалить">×</button></div>').join('')
-   +(draftPhotos.length<6?'<div class="photo add" data-act="add-photo"><span>+</span></div>':'');
-  hydratePhotos();
-}
-
-/* ================= forms ================= */
-function carForm(id){
-  const c=id?car(id):{plate:'',model:'',vin:'',owner:'',phone:'',mileage:'',note:''};
-  if(id&&!c)return;
-  openSheet({
-    title:id?'Автомобиль':'Принять машину',
-    body:'<div class="field" data-f="plate"><label for="c_plate">Госномер</label><input id="c_plate" value="'+esc(c.plate)+'" placeholder="А 427 ВК 77" maxlength="16" autocomplete="off"><div class="msg">Укажите номер</div></div>'
-      +'<div class="grid2"><div class="field"><label for="c_model">Марка и модель</label><input id="c_model" value="'+esc(c.model)+'" placeholder="Toyota Camry"></div>'
-      +'<div class="field"><label for="c_mileage">Пробег</label><input id="c_mileage" value="'+esc(c.mileage)+'" placeholder="84 200"></div></div>'
-      +'<div class="field"><label for="c_vin">VIN (необязательно)</label><input id="c_vin" value="'+esc(c.vin)+'" placeholder="XW7BF4FK20S012345" maxlength="20"></div>'
-      +'<div class="grid2"><div class="field"><label for="c_owner">Владелец</label><input id="c_owner" value="'+esc(c.owner)+'" placeholder="Сергей П."></div>'
-      +'<div class="field"><label for="c_phone">Телефон</label><input id="c_phone" inputmode="tel" value="'+esc(c.phone)+'" placeholder="+7 …"></div></div>'
-      +'<div class="field" style="margin-bottom:2px"><label for="c_note">Причина обращения</label><input id="c_note" value="'+esc(c.note||'')+'" placeholder="Кузовной ремонт после парковки"></div>',
-    foot:'<button class="btn ghost" data-act="close-sheet">Отмена</button><button class="btn primary" id="c_save">'+(id?'Сохранить':'Принять')+'</button>',
-    onMount:(bd,close)=>{
-      $('#c_save',bd).onclick=()=>{
-        const plate=$('#c_plate',bd).value.trim();
-        if(!plate){$('[data-f="plate"]',bd).classList.add('invalid');$('#c_plate',bd).classList.add('err');$('#c_plate',bd).focus();return;}
-        const data={plate,model:$('#c_model',bd).value.trim(),vin:$('#c_vin',bd).value.trim(),owner:$('#c_owner',bd).value.trim(),phone:$('#c_phone',bd).value.trim(),mileage:$('#c_mileage',bd).value.trim(),note:$('#c_note',bd).value.trim()};
-        if(id){Object.assign(car(id),data);}
-        else{const nc=Object.assign({id:'a_'+uid(),createdAt:Date.now(),status:'draft',zones:{},works:[],sig:null},data);S.cars.unshift(nc);close();save();location.hash='#/c/'+nc.id;render();toast('Машина принята');return;}
-        save();close();render();toast('Сохранено');
-      };
-    }
+    fr.onerror=rej;fr.readAsDataURL(file);
   });
 }
 
-function zoneSheet(cid,zk){
+function signSheet(cid,kind){
   const c=car(cid);if(!c)return;
-  const z=c.zones[zk]||{photos:[],marks:{},note:''};
-  const zdef=ZONES.find(x=>x.k===zk)||{t:'Зона'};
-  draftPhotos=(z.photos||[]).slice();
-  const marks={...z.marks};
-  const renderMarks=()=>MARKS.map(m=>{
-    const n=marks[m]||0;
-    return '<button class="mark '+(n?'on':'')+'" data-m="'+m+'">'+m+(n?' · '+n:'')+'</button>';
-  }).join('');
-  openSheet({
-    title:zdef.t,
-    body:'<div class="hint" style="margin-bottom:10px">Нажмите на повреждение — каждое нажатие добавляет одну отметку.</div>'
-      +'<div class="marks" id="z_marks">'+renderMarks()+'</div>'
-      +'<div class="field" style="margin-top:12px"><label for="z_note">Примечание</label><input id="z_note" value="'+esc(z.note||'')+'" placeholder="Задняя дверь и крыло"></div>'
-      +'<div class="field" style="margin-bottom:2px"><label>Фото зоны — до 6</label><div class="photos" id="z_photos"></div></div>',
-    foot:'<button class="btn ghost" data-act="close-sheet">Отмена</button><button class="btn primary" id="z_save">Готово</button>',
-    onMount:(bd,close)=>{
-      renderDraftPhotos($('#z_photos',bd));
-      $('#z_marks',bd).addEventListener('click',e=>{
-        const b=e.target.closest('[data-m]');if(!b)return;
-        const m=b.dataset.m;marks[m]=((marks[m]||0)+1)%6;
-        $('#z_marks',bd).innerHTML=renderMarks();
-      });
-      $('#z_save',bd).onclick=()=>{
-        c.zones[zk]={photos:draftPhotos.slice(),marks:Object.fromEntries(Object.entries(marks).filter(([k,v])=>v>0)),note:$('#z_note',bd).value.trim()};
-        save();close();render();
-      };
-    }
-  });
-}
-
-function workForm(cid,wid){
-  const c=car(cid);if(!c)return;
-  const w=wid?c.works.find(x=>x.id===wid):{title:'',qty:1,price:''};
-  openSheet({
-    title:wid?'Работа':'Новая работа',
-    body:'<div class="field" data-f="t"><label for="w_title">Что делаем</label><input id="w_title" value="'+esc(w.title)+'" placeholder="Покраска двери"><div class="msg">Назовите работу</div></div>'
-      +'<div class="grid2"><div class="field"><label for="w_qty">Кол-во</label><input id="w_qty" inputmode="decimal" value="'+esc(w.qty)+'"></div>'
-      +'<div class="field" data-f="p"><label for="w_price">Цена, ₽</label><input id="w_price" inputmode="numeric" value="'+esc(w.price)+'" placeholder="0"><div class="msg">Укажите цену</div></div></div>',
-    foot:'<button class="btn ghost" data-act="close-sheet">Отмена</button><button class="btn primary" id="w_save">Сохранить</button>',
-    onMount:(bd,close)=>{
-      $('#w_save',bd).onclick=()=>{
-        const title=$('#w_title',bd).value.trim(),price=nOf($('#w_price',bd).value);
-        let bad=false;
-        if(!title){$('[data-f="t"]',bd).classList.add('invalid');bad=true;}
-        if(!price){$('[data-f="p"]',bd).classList.add('invalid');bad=true;}
-        if(bad)return;
-        const data={title,qty:nOf($('#w_qty',bd).value)||1,price};
-        if(wid)Object.assign(w,c.works.find(x=>x.id===wid)||{},data);
-        else c.works.push(Object.assign({id:'w_'+uid()},data));
-        if(wid){const t=c.works.find(x=>x.id===wid);Object.assign(t,data);}
-        save();close();render();
-      };
-    }
-  });
-}
-
-function signSheet(cid){
-  const c=car(cid);if(!c)return;
-  openSheet({
-    title:'Подпись владельца',
-    body:'<p class="hint" style="margin-bottom:12px">Владелец подтверждает, что перечисленные повреждения зафиксированы до начала работ.</p>'
-      +'<div class="card" style="margin-bottom:12px"><div style="font-weight:600">'+esc(c.plate)+' · '+esc(c.model||'')+'</div>'
-      +'<div class="hint">'+zonesFilled(c)+' '+plural(zonesFilled(c),'зона','зоны','зон')+' с отметками · '+marksCount(c)+' '+plural(marksCount(c),'повреждение','повреждения','повреждений')+'</div></div>'
+  const isHand=kind==='handover';
+  const sum=partsSum(c);
+  const body='<p class="hint" style="margin-bottom:12px">'
+      + (isHand?'Владелец принимает выполненные работы и подтверждает, что претензий по объёму и качеству нет.'
+               :'Владелец подтверждает, что перечисленные повреждения зафиксированы до начала работ.')
+      +'</p>'
+      +'<div class="card" style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:12px">'
+      +'<div style="font-weight:800">'+esc(c.plate)+' · '+esc(c.model||'')+'</div>'
+      +'<div class="hint">'+itemsOf(c).length+' '+plur(itemsOf(c).length,'позиция','позиции','позиций')
+      +' · запчасти '+money(sum)+(isHand?' · работа '+money(laborSum(c)):'')+'</div></div>'
       +'<div class="field"><label for="s_name">ФИО владельца</label><input id="s_name" value="'+esc((c.sig&&c.sig.name)||c.owner||'')+'" placeholder="Сергей Петров"></div>'
-      +'<div class="sigwrap"><canvas id="sigpad"></canvas><div class="sigline"><span>подпись владельца</span><span id="sigclear" style="cursor:pointer">очистить</span></div></div>',
-    foot:'<button class="btn ghost" data-act="close-sheet">Отмена</button><button class="btn primary" id="s_save">Подписать</button>',
+      +'<div class="sigwrap"><canvas id="sigpad"></canvas><div class="sigline"><span>подпись владельца</span><span id="sigclear" style="cursor:pointer">очистить</span></div></div>'
+      +'<div class="hint" style="margin-top:10px">Мастер: '+esc(S.me.name||'—')+'</div>';
+  openSheet({
+    title:isHand?'Выдача машины':'Подпись владельца',
+    body,
+    foot:'<button class="btn ghost" data-act="close-sheet">Отмена</button><button class="btn primary" id="s_save">'+(isHand?'Выдать':'Подписать')+'</button>',
     onMount:(bd,close)=>{
       const cv=$('#sigpad',bd),ctx=cv.getContext('2d');
       const dpr=Math.min(window.devicePixelRatio||1,2);
       const r=cv.getBoundingClientRect();
-      cv.width=Math.round((r.width||300)*dpr);cv.height=Math.round((r.height||170)*dpr);
+      cv.width=Math.round((r.width||300)*dpr);cv.height=Math.round((r.height||160)*dpr);
       ctx.setTransform(dpr,0,0,dpr,0,0);ctx.lineWidth=2.2;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#111';
       let drawing=false,dirty=false;
       const pos=e=>{const rr=cv.getBoundingClientRect();return{x:e.clientX-rr.left,y:e.clientY-rr.top};};
-      cv.addEventListener('pointerdown',e=>{e.preventDefault();drawing=true;const p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);try{cv.setPointerCapture(e.pointerId);}catch(_){}});
+      cv.addEventListener('pointerdown',e=>{e.preventDefault();drawing=true;const p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);try{cv.setPointerCapture(e.pointerId);}catch(_){}} );
       cv.addEventListener('pointermove',e=>{if(!drawing)return;e.preventDefault();const p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();dirty=true;});
       cv.addEventListener('pointerup',()=>{drawing=false;});
       cv.addEventListener('pointercancel',()=>{drawing=false;});
       $('#sigclear',bd).onclick=()=>{ctx.clearRect(0,0,cv.width,cv.height);dirty=false;};
-      $('#s_save',bd).onclick=()=>{
+      $('#s_save').onclick=()=>{
         if(!dirty){toast('Сначала поставьте подпись');return;}
         const name=$('#s_name',bd).value.trim();
         if(!name){$('#s_name',bd).classList.add('err');$('#s_name',bd).focus();return;}
-        c.sig={name,at:Date.now(),data:cv.toDataURL('image/png')};
-        c.signedAt=Date.now();c.status='signed';
-        save();close();render();toast('Акт подписан');
+        const sig={name,at:Date.now(),data:cv.toDataURL('image/png')};
+        if(isHand){c.handSig=sig;c.handAt=Date.now();c.status='closed';c.closedAt=Date.now();}
+        else{c.sig=sig;c.signedAt=Date.now();c.status='signed';}
+        save();close();render();
+        toast(isHand?'Машина выдана':'Акт подписан · машина в «Подписан»');
       };
     }
   });
+}
+
+/* ================= documents ================= */
+function docHead(c,title,sub){
+  const me=S.me;
+  return '<div class="doc-top"><div><h1>'+title+'</h1><div style="font-size:9pt;color:#333">'+sub+'</div></div>'
+   +'<div class="who"><b>'+esc(me.name||'Сервис')+'</b><br>'+esc(me.phone||'')+'</div></div>';
+}
+function printAccept(cid){
+  const c=car(cid);if(!c)return;
+  const its=itemsOf(c);
+  const rows=its.map((i,n)=>'<tr><td class="num">'+(n+1)+'</td><td>'+esc(i.group)+'</td><td>'+esc(i.part)+'</td>'
+   +'<td>'+esc(i.damage||'—')+(i.note?'<br><span style="color:#555">'+esc(i.note)+'</span>':'')+'</td>'
+   +'<td>'+MODES[i.mode]+'</td><td class="num">'+money(i.partPrice)+'</td></tr>').join('');
+  const html='<div class="doc">'
+   +docHead(c,'Акт приёма автомобиля','от '+dmy(c.createdAt))
+   +'<div class="kv"><b>Автомобиль:</b><span>'+esc(c.plate)+(c.model?' · '+esc(c.model):'')+'</span></div>'
+   +'<div class="kv"><b>VIN:</b><span>'+esc(c.vin||'—')+'</span></div>'
+   +'<div class="kv"><b>Владелец:</b><span>'+esc(c.owner||'—')+(c.phone?' · '+esc(c.phone):'')+'</span></div>'
+   +'<div class="kv"><b>Пробег:</b><span>'+esc(c.mileage||'—')+'</span></div>'
+   +'<div class="kv"><b>Дата привоза:</b><span>'+dtm(c.createdAt)+'</span></div>'
+   +(c.note?'<div class="kv"><b>Жалобы:</b><span>'+esc(c.note)+'</span></div>':'')
+   +'<h2>Зафиксированные неисправности</h2>'
+   +(rows?'<table><thead><tr><th style="width:22px">№</th><th>Группа</th><th>Узел</th><th>Повреждение</th><th style="width:64px">Что</th><th class="num" style="width:78px">Запчасть</th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="5">Итого по запчастям</td><td class="num">'+money(partsSum(c))+'</td></tr></tfoot></table>'
+      :'<div style="font-size:9.5pt;padding:6px 0">Неисправностей не зафиксировано.</div>')
+   +'<div class="note">'+ACT_NOTE+'</div>'
+   +'<div class="signs">'
+   +'<div><div class="ln"></div><div class="cap"><span>Сдал (владелец)</span><span>'+esc((c.sig&&c.sig.name)||c.owner||'')+'</span></div></div>'
+   +'<div><div class="ln">'+((c.sig&&c.sig.data)?'<img src="'+c.sig.data+'" alt="">':'')+'</div><div class="cap"><span>Принял (сервис)</span><span>'+esc(S.me.name||'')+'</span></div></div>'
+   +'</div></div>';
+  $('#printRoot').innerHTML=html;
+  setTimeout(()=>window.print(),80);
+}
+function printHand(cid){
+  const c=car(cid);if(!c)return;
+  const its=itemsOf(c);
+  const rows=its.map((i,n)=>'<tr><td class="num">'+(n+1)+'</td>'
+   +'<td>'+esc(i.part)+'<br><span style="color:#555;font-size:8.5pt">'+esc(i.group)+' · '+MODES[i.mode]+(i.damage?' · '+esc(i.damage):'')+'</span></td>'
+   +'<td class="num">'+money(i.partPrice)+'</td><td class="num">'+money(i.labor)+'</td><td class="num">'+money(rowSum(i))+'</td></tr>').join('');
+  const html='<div class="doc">'
+   +docHead(c,'Акт сдачи работ',(c.handAt?'от '+dmy(c.handAt):''))
+   +'<div class="kv"><b>Автомобиль:</b><span>'+esc(c.plate)+(c.model?' · '+esc(c.model):'')+'</span></div>'
+   +'<div class="kv"><b>Владелец:</b><span>'+esc(c.owner||'—')+(c.phone?' · '+esc(c.phone):'')+'</span></div>'
+   +'<div class="kv"><b>Привезена:</b><span>'+dtm(c.createdAt)+'</span></div>'
+   +'<div class="kv"><b>Акт приёма подписан:</b><span>'+dtm(c.signedAt)+'</span></div>'
+   +'<h2>Выполненные работы</h2>'
+   +'<table><thead><tr><th style="width:22px">№</th><th>Работа</th><th class="num" style="width:78px">Запчасть</th><th class="num" style="width:78px">Работа мастера</th><th class="num" style="width:86px">Сумма</th></tr></thead><tbody>'+rows+'</tbody></table>'
+   +'<div class="totals"><div>Запчасти<b>'+money(partsSum(c))+'</b></div><div>Работа мастера<b>'+money(laborSum(c))+'</b></div><div>Всего<b>'+money(partsSum(c)+laborSum(c))+'</b></div></div>'
+   +'<div class="note">Владелец подтверждает, что работы выполнены в полном объёме, претензий по объёму и качеству не имеет.</div>'
+   +'<div class="signs">'
+   +'<div><div class="ln">'+((c.handSig&&c.handSig.data)?'<img src="'+c.handSig.data+'" alt="">':'')+'</div><div class="cap"><span>Принял (владелец)</span><span>'+esc((c.handSig&&c.handSig.name)||c.owner||'')+'</span></div></div>'
+   +'<div><div class="ln"></div><div class="cap"><span>Сдал (сервис)</span><span>'+esc(S.me.name||'')+'</span></div></div>'
+   +'</div></div>';
+  $('#printRoot').innerHTML=html;
+  setTimeout(()=>window.print(),80);
 }
 
 /* ================= share ================= */
@@ -657,88 +740,159 @@ function carText(c){
   const L=['Осмотр автомобиля',''];
   L.push(c.plate+(c.model?' · '+c.model:''));
   if(c.owner)L.push('Владелец: '+c.owner);
-  const zs=ZONES.filter(z=>zoneHas(c.zones[z.k]));
-  if(zs.length){L.push('');zs.forEach(z=>{const zz=c.zones[z.k];const m=Object.entries(zz.marks||{}).filter(([k,v])=>v>0).map(([k,v])=>k+(v>1?' ×'+v:'')).join(', ');L.push('• '+z.t+': '+(m||'фото'));});}
-  else L.push('Повреждений не зафиксировано.');
-  if(c.works.length){L.push('');L.push('Смета: '+fmt(worksSum(c)));}
-  L.push('');L.push((S.me.name||'Сервис')+(S.me.phone?' · '+S.me.phone:''));
+  L.push('Привезена: '+dtm(c.createdAt));
+  L.push('');
+  groupsUsed(c).forEach(g=>{
+    L.push(g+':');
+    itemsOf(c).filter(i=>i.group===g).forEach(i=>{
+      L.push('  · '+i.part+' — '+MODES[i.mode].toLowerCase()+(i.damage?', '+i.damage:'')+(i.partPrice?', '+money(i.partPrice):''));
+    });
+  });
+  L.push('');
+  L.push('Итого по запчастям: '+money(partsSum(c)));
+  if(laborSum(c))L.push('Работа мастера: '+money(laborSum(c)));
   return L.join('\n');
 }
 function shareSheet(text){
   openSheet({
-    title:'Сообщение владельцу',
-    body:'<div class="field"><textarea id="sh_text" style="min-height:180px;font-size:14px">'+esc(text)+'</textarea></div>'
-      +'<div class="hint">Кнопка копирует текст и открывает мессенджер — вставьте в чат. Акт с подписью — «Акт PDF» → «Сохранить как PDF».</div>',
-    foot:'<button class="btn primary" id="sh_max">Отправить в MAX</button><button class="btn ghost" id="sh_copy">Скопировать</button>',
-    onMount:(bd)=>{
-      const ta=$('#sh_text',bd);
-      $('#sh_copy',bd).onclick=()=>copyText(ta.value);
-      $('#sh_max',bd).onclick=()=>{copyText(ta.value,'Текст в буфере — вставьте в чат MAX');window.open('https://max.ru','_blank','noopener');};
-    }
+    title:'Отправить',
+    body:'<div class="hint" style="margin-bottom:10px">Скопируйте текст и отправьте в MAX или мессенджер.</div>'
+      +'<textarea id="sh_text" style="width:100%;height:230px;background:#0F141A;border:1px solid var(--line);border-radius:12px;color:var(--ink);padding:11px;font-size:14px;line-height:1.45">'+esc(text)+'</textarea>',
+    foot:'<button class="btn ghost" data-act="close-sheet">Закрыть</button><button class="btn primary" data-act="copy-share">Скопировать</button>'
   });
 }
 
-/* ================= print ================= */
-const ACT_NOTE='Владелец подтверждает, что перечисленные повреждения и комплектность зафиксированы при передаче автомобиля в сервис. Повреждения, не указанные в настоящем акте, считаются отсутствовавшими на момент приёмки. Автомобиль передан без претензий по зафиксированным позициям.';
-function printAct(id){
-  const c=car(id);if(!c)return;
-  const me=S.me;
-  const rows=ZONES.filter(z=>zoneHas(c.zones[z.k])).map(z=>{
-    const zz=c.zones[z.k];
-    const m=Object.entries(zz.marks||{}).filter(([k,v])=>v>0).map(([k,v])=>k+(v>1?' ×'+v:'')).join(', ');
-    const ph=(zz.photos||[]).length;
-    return '<tr><td>'+esc(z.t)+'</td><td>'+esc(m||'—')+'</td><td>'+esc(zz.note||'')+'</td><td class="num">'+(ph?ph:'—')+'</td></tr>';
-  }).join('');
-  const works=c.works.map((w,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(w.title)+'</td><td class="num">'+esc(w.qty)+'</td><td class="num">'+fmt(w.price)+'</td><td class="num">'+fmt(num(nOf(w.qty)*nOf(w.price)))+'</td></tr>').join('');
-  const html='<div class="doc">'
-   +'<div class="doc-top"><div><h1>Акт приёма-передачи<br>автомобиля в сервис</h1>'
-   +'<div style="font-size:9.5pt;color:#444;margin-top:4px">№ '+esc('АП-'+c.id.slice(-6).toUpperCase())+' от '+dmy(c.createdAt)+'</div></div>'
-   +'<div class="who"><b>Сервис:</b><br>'+esc(me.name||'—')+(me.phone?'<br>'+esc(me.phone):'')+'</div></div>'
-   +'<div class="kv"><b>Автомобиль:</b><span>'+esc(c.model||'—')+', гос. номер '+esc(c.plate)+'</span></div>'
-   +(c.vin?'<div class="kv"><b>VIN:</b><span>'+esc(c.vin)+'</span></div>':'')
-   +(c.mileage?'<div class="kv"><b>Пробег:</b><span>'+esc(c.mileage)+' км</span></div>':'')
-   +'<div class="kv"><b>Владелец:</b><span>'+esc(c.owner||'—')+(c.phone?' · '+esc(c.phone):'')+'</span></div>'
-   +'<h2>Зафиксированные повреждения</h2>'
-   +(rows?'<table><thead><tr><th>Зона</th><th>Повреждения</th><th>Примечание</th><th class="num">Фото</th></tr></thead><tbody>'+rows+'</tbody></table>'
-          :'<div style="font-size:10pt;padding:8px 0">Повреждений не выявлено.</div>')
-   +(works?'<h2>Смета работ</h2><table><thead><tr><th style="width:24px">№</th><th>Работа</th><th class="num" style="width:60px">Кол-во</th><th class="num" style="width:90px">Цена</th><th class="num" style="width:100px">Сумма</th></tr></thead><tbody>'+works+'</tbody><tfoot><tr><td colspan="4">Итого</td><td class="num">'+fmt(worksSum(c))+'</td></tr></tfoot></table>':'')
-   +'<div class="note">'+ACT_NOTE+'</div>'
-   +'<div class="signs">'
-   +'<div><div class="ln"></div><div class="cap"><span>Сдал (владелец)</span><span>'+esc((c.sig&&c.sig.name)||c.owner||'')+'</span></div></div>'
-   +'<div><div class="ln">'+((c.sig&&c.sig.data)?'<img src="'+c.sig.data+'" alt="">':'')+'</div><div class="cap"><span>Принял (сервис)</span><span>'+esc(me.name||'')+'</span></div></div>'
-   +'</div></div>';
-  $('#printRoot').innerHTML=html;
-  setTimeout(()=>window.print(),80);
+/* ================= actions ================= */
+function pick(name){return $(name);}
+function val(name){const el=$(name);return el?el.value:'';}
+function toast(msg){
+  const host=$('#toast');
+  const d=document.createElement('div');
+  d.className='toast';d.textContent=msg;
+  host.appendChild(d);
+  setTimeout(()=>{d.style.opacity='0';d.style.transition='opacity .25s';},2000);
+  setTimeout(()=>d.remove(),2400);
 }
 
-/* ================= actions ================= */
 document.addEventListener('click',e=>{
-  const el=e.target.closest('[data-act]');if(!el)return;
+  const el=e.target.closest('[data-act]');
+  if(!el)return;
   const act=el.dataset.act;
   if(el.tagName==='A')e.preventDefault();
   switch(act){
     case 'go': location.hash=el.dataset.to; break;
-    case 'back': history.back(); break;
+    case 'back': history.length>1?history.back():location.hash='#/'; break;
     case 'close-sheet': closeTop(); break;
     case 'new-car': carForm(null); break;
     case 'edit-car': carForm(el.dataset.id); break;
-    case 'zone': zoneSheet(el.dataset.id,el.dataset.z); break;
-    case 'add-work': workForm(el.dataset.id,null); break;
-    case 'edit-work': workForm(el.dataset.id,el.dataset.w); break;
-    case 'sign': signSheet(el.dataset.id); break;
-    case 'print': printAct(el.dataset.id); break;
-    case 'share': {const c=car(el.dataset.id);if(c)shareSheet(carText(c));break;}
-    case 'close-car': {const c=car(el.dataset.id);if(!c)break;if(!c.signedAt){toast('Сначала подпишите акт');break;}c.status='closed';c.closedAt=Date.now();save();render();toast('Машина выдана');break;}
-    case 'reopen': {const c=car(el.dataset.id);if(!c)break;c.status=c.signedAt?'signed':'draft';save();render();toast('Возвращено в работу');break;}
-    case 'del-car': {const c=car(el.dataset.id);if(c&&confirm('Удалить карточку '+c.plate+'?')){S.cars=S.cars.filter(x=>x.id!==c.id);save();location.hash='#/';render();toast('Удалено');}break;}
+    case 'save-car': {
+      const cid=el.dataset.id;
+      const plate=$('#c_plate').value.trim().toUpperCase();
+      if(!plate){$('#c_plate').classList.add('err');$('#c_plate').focus();toast('Нужен госномер');break;}
+      const dateStr=$('#c_date')?$('#c_date').value:'';
+      const createdAt=dateStr?new Date(dateStr).getTime():Date.now();
+      const data={plate,model:$('#c_model').value.trim(),mileage:$('#c_mileage').value.trim(),
+        vin:$('#c_vin').value.trim().toUpperCase(),owner:$('#c_owner').value.trim(),phone:$('#c_phone').value.trim(),
+        note:$('#c_note').value.trim(),createdAt:createdAt||Date.now()};
+      if(cid){const c=car(cid);Object.assign(c,data);}
+      else{
+        const c=Object.assign({id:'c_'+uid(),status:'draft',items:[],clean:{},sig:null,signedAt:null,handSig:null,handAt:null,closedAt:null},data);
+        S.cars.push(c);
+        closeTop();save();location.hash='#/c/'+c.id;render();toast('Машина принята');break;
+      }
+      closeTop();save();render();toast('Сохранено');break;
+    }
+    case 'add-item': itemForm(el.dataset.id,null,el.dataset.g); break;
+    case 'edit-item': itemForm(el.dataset.id,el.dataset.i); break;
+    case 'save-item': {
+      const cid=el.dataset.id, iid=el.dataset.i, cont=el.dataset.cont==='1';
+      const c=car(cid);if(!c)break;
+      const bd=$('.sheet-body');
+      const st=bd&&bd._getState?bd._getState():null;
+      if(!st){break;}
+      if(st.newGroup){ if(S.groups.indexOf(st.newGroup)<0)S.groups.push(st.newGroup); }
+      const group=st.newGroup||st.group;
+      if(!st.part){$('#i_part').classList.add('err');$('#i_part').focus();toast('Напишите, что за деталь');break;}
+      const data={group,part:st.part,damage:st.damage,mode:st.mode,note:st.note,
+        partPrice:Math.round(nOf(st.partPrice)),labor:Math.round(nOf(st.labor)),photos:draftPhotos.slice()};
+      if(iid){const it=itemsOf(c).find(x=>x.id===iid);Object.assign(it,data);}
+      else{c.items.push(Object.assign(mkItem({}),data));delete c.clean[group];}
+      save();
+      if(cont){ itemForm(cid,null,group); toast('Добавлено · следующая'); }
+      else{ closeTop(); render(); toast(iid?'Позиция обновлена':'Добавлено'); }
+      break;
+    }
+    case 'del-item': {
+      const cid=el.dataset.id,iid=el.dataset.i;
+      const c=car(cid);if(!c)break;
+      const it=itemsOf(c).find(x=>x.id===iid);
+      (it&&it.photos||[]).forEach(p=>PhotoDB.del(p));
+      c.items=itemsOf(c).filter(x=>x.id!==iid);
+      save();closeTop();render();toast('Позиция удалена');break;
+    }
+    case 'clean': {
+      const c=car(el.dataset.id);if(!c)break;
+      c.clean=c.clean||{};
+      const g=el.dataset.g;
+      if(c.clean[g])delete c.clean[g];else c.clean[g]=Date.now();
+      save();render();break;
+    }
     case 'add-photo': pickPhotos(); break;
-    case 'del-photo': {const i=+el.dataset.i;draftPhotos.splice(i,1);renderDraftPhotos($('#z_photos'));break;}
-    case 'quick-add': carForm(null); break;
-    case 'activate-pro': S.pro=true;save();closeTop();render();toast('Pro включён (демо)');break;
+    case 'del-photo': {
+      const i=+el.dataset.i;
+      const id=draftPhotos[i];
+      if(id)PhotoDB.del(id);
+      draftPhotos.splice(i,1);
+      renderDraftPhotos($('#i_photos'));
+      break;
+    }
+    case 'sign': signSheet(el.dataset.id,'accept'); break;
+    case 'hand': {
+      const c=car(el.dataset.id);if(!c)break;
+      if(!c.signedAt){toast('Сначала подпишите акт приёма');break;}
+      signSheet(el.dataset.id,'handover');break;
+    }
+    case 'reopen': {const c=car(el.dataset.id);if(!c)break;c.status=c.signedAt?'signed':'draft';c.closedAt=null;c.handAt=null;c.handSig=null;save();render();toast('Возвращено в работу');break;}
+    case 'print-accept': printAccept(el.dataset.id); break;
+    case 'print-hand': printHand(el.dataset.id); break;
+    case 'share': {const c=car(el.dataset.id);if(c)shareSheet(carText(c));break;}
+    case 'copy-share': {
+      const t=$('#sh_text');
+      if(t){t.select();try{document.execCommand('copy');toast('Скопировано');}catch(e){toast('Не удалось скопировать');}}
+      break;
+    }
     case 'save-me': S.me.name=$('#m_name').value.trim();S.me.phone=$('#m_phone').value.trim();save();render();toast('Сохранено');break;
-    case 'export': {const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='priemka-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('Копия скачана');break;}
-    case 'import': {const inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json';inp.onchange=async()=>{const f=inp.files&&inp.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.cars))throw new Error('bad');S=Object.assign(blank(),d);S.me=Object.assign(blank().me,d.me||{});save();render();toast('Данные загружены');}catch(err){toast('Файл не подошёл');}};inp.click();break;}
-    case 'reset': {if(!confirm('Удалить все машины с этого устройства?'))break;S=blank();save();location.hash='#/';render();toast('Всё очищено');break;}
+    case 'export': {
+      const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+      const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+      a.download='servis-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('Копия скачана');break;
+    }
+    case 'import': {
+      const inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json';
+      inp.onchange=async()=>{
+        const f=inp.files&&inp.files[0];if(!f)return;
+        try{const d=JSON.parse(await f.text());if(!Array.isArray(d.cars))throw new Error('bad');
+          S=Object.assign(blank(),d);S.groups=S.groups&&S.groups.length?S.groups:GROUPS.slice();
+          S.me=Object.assign({name:'',phone:''},d.me||{});save();render();toast('Данные загружены');
+        }catch(err){toast('Файл не подошёл');}
+      };
+      inp.click();break;
+    }
+    case 'reset': {
+      if(!confirm('Удалить все машины с этого телефона?'))break;
+      S=blank();save();location.hash='#/';render();toast('Всё очищено');break;
+    }
+  }
+});
+
+document.addEventListener('input',e=>{
+  if(e.target&&e.target.id==='q'){
+    const q=e.target.value.trim().toLowerCase();
+    $$('#carsList .item').forEach(it=>{
+      const qq=it.dataset.q||'';
+      it.style.display=(!q||qq.indexOf(q)>=0)?'':'none';
+    });
   }
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTop();});
@@ -746,7 +900,6 @@ window.addEventListener('hashchange',()=>{render();window.scrollTo(0,0);});
 
 /* ================= boot ================= */
 load();
-const tb=$('#tbPlan');if(tb)tb.onclick=()=>openSheet({title:'Тариф',body:'<div class="card"><div style="font-weight:700;font-size:16px">Pro — без лимита машин</div><div class="hint" style="margin-top:4px">Один спор о царапине стоит дороже года подписки.</div><div style="display:flex;align-items:flex-end;gap:8px;margin:14px 0"><span style="font-size:30px;font-weight:800;letter-spacing:-.03em">1 490 ₽</span><span class="hint" style="padding-bottom:4px">/ месяц за сервис</span></div></div>',foot:'<button class="btn ghost" data-act="close-sheet">Позже</button><button class="btn primary" data-act="activate-pro">Включить Pro (демо)</button>'});
 render();
 })();</script>
 <script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,8 @@
   html,body{height:100%}
   body{margin:0;display:grid;place-items:center;text-align:center;background:#0E1116;color:#EDF1F6;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
   .box{padding:24px;max-width:360px}
-  .mark{width:64px;height:64px;border-radius:18px;margin:0 auto 18px;display:grid;place-items:center;background:linear-gradient(160deg,#FFD37A,#E8A21E);color:#1A1405;font-weight:800;font-size:30px;box-shadow:0 8px 24px rgba(232,162,30,.24)}
+  .mark{width:64px;height:64px;border-radius:18px;margin:0 auto 18px;display:grid;place-items:center;background:linear-gradient(160deg,#FFD37A,#E8A21E);box-shadow:0 8px 24px rgba(232,162,30,.24)}
+  .mark svg{width:38px;height:38px;stroke:#1A1405;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
   h1{font-size:22px;margin:0 0 6px;letter-spacing:-.02em}
   p{color:#96A3B4;font-size:14px;margin:0 0 18px;line-height:1.5}
   a.btn{display:inline-block;padding:13px 22px;border-radius:12px;text-decoration:none;background:#FFC24B;color:#1A1405;font-weight:700;font-size:15px}
@@ -17,11 +18,10 @@
 </head>
 <body>
   <div class="box">
-    <div class="mark">С</div>
+    <div class="mark"><svg viewBox="0 0 24 24"><path d="M3 16h18l-1.4-4.3A2 2 0 0 0 17.7 10H6.3a2 2 0 0 0-1.9 1.7L3 16Z"/><circle cx="7" cy="16.5" r="1.7"/><circle cx="17" cy="16.5" r="1.7"/><path d="M7.5 10 9 7h6l1.5 3"/></svg></div>
     <h1>Сервис</h1>
-    <p>Файл скачивается. Если не началось — нажмите кнопку.</p>
-    <a class="btn" id="dl" href="servis.html" download="Сервис.html">Скачать файл</a>
+    <p>Приёмка автомобиля: неисправности, смета, акт приёма и акт сдачи работ.</p>
+    <a class="btn" href="index.html" download="Сервис.html">Скачать файл</a>
   </div>
-  <script>setTimeout(function(){var a=document.getElementById('dl');if(a)a.click();},200);</script>
 </body>
 </html>

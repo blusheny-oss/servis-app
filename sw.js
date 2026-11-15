@@ -1,4 +1,4 @@
-const CACHE = 'servis-v1';
+﻿const CACHE = 'servis-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -7,7 +7,6 @@ const ASSETS = [
   './icon-512.png',
   './icon-maskable-512.png'
 ];
-
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE)
@@ -16,7 +15,6 @@ self.addEventListener('install', (e) => {
       .catch(() => self.skipWaiting())
   );
 });
-
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys()
@@ -24,17 +22,13 @@ self.addEventListener('activate', (e) => {
       .then(() => self.clients.claim())
   );
 });
-
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
-    caches.match(e.request).then((hit) => {
-      if (hit) return hit;
-      return fetch(e.request).then((resp) => {
-        const copy = resp.clone();
-        caches.open(CACHE).then((c) => c.put(e.request, copy)).catch(() => {});
-        return resp;
-      }).catch(() => caches.match('./index.html'));
-    })
+    fetch(e.request).then((resp) => {
+      const copy = resp.clone();
+      caches.open(CACHE).then((c) => c.put(e.request, copy)).catch(() => {});
+      return resp;
+    }).catch(() => caches.match(e.request).then((hit) => hit || caches.match('./index.html')))
   );
 });

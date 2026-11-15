@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#0E1116">
+<title>Установить «Сервис»</title>
+<style>
+  html,body{min-height:100%}
+  body{
+    margin:0;padding:26px 18px 34px;box-sizing:border-box;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;
+    background:#0E1116;color:#EDF1F6;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  }
+  .icon{width:96px;height:96px;border-radius:24px;box-shadow:0 12px 30px rgba(255,194,75,.18);display:block}
+  h1{font-size:24px;margin:18px 0 4px;letter-spacing:-.02em}
+  .sub{color:#96A3B4;font-size:14px;margin:0 0 22px;line-height:1.45;max-width:320px}
+  button,.ghost{
+    width:100%;max-width:340px;height:52px;border-radius:14px;cursor:pointer;box-sizing:border-box;
+    display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:16px;font-weight:700;
+  }
+  button{border:none;background:linear-gradient(160deg,#FFD37A,#E8A21E);color:#1A1405;box-shadow:0 10px 24px rgba(232,162,30,.26)}
+  button:active{transform:scale(.99)}
+  .ghost{margin-top:10px;border:1.5px solid #FFC24B;color:#FFC24B;background:transparent;font-size:15px;font-weight:600;display:none}
+  .facts{display:flex;gap:16px;margin-top:20px;font-size:12px;color:#96A3B4;flex-wrap:wrap;justify-content:center}
+  .steps{display:none;margin-top:20px;max-width:340px;width:100%;text-align:left;background:#171C23;border:1px solid #2A313B;border-radius:16px;padding:16px 18px;font-size:14px;line-height:1.55;color:#D5DEE9}
+  .steps b{display:block;margin-bottom:8px;font-size:14px}
+  .steps ol{margin:0;padding-left:18px}
+  .steps li{margin-bottom:6px}
+  .done{display:none;margin-top:16px;font-size:15px;font-weight:600;color:#3BD67F}
+</style>
+</head>
+<body>
+  <img class="icon" src="icon-192.png" alt="Сервис">
+  <h1>Сервис</h1>
+  <p class="sub">Приёмка автомобиля с фото, отметками повреждений и подписью владельца.</p>
+
+  <button id="install" type="button">Установить приложение</button>
+  <a class="ghost" id="chrome" href="#">Открыть в Chrome</a>
+  <div class="done" id="done">Приложение уже установлено</div>
+
+  <div class="facts">
+    <div>● работает без интернета</div>
+    <div>● данные на телефоне</div>
+  </div>
+
+  <div class="steps" id="steps">
+    <b id="stepsTitle"></b>
+    <ol id="stepsList"></ol>
+  </div>
+
+<script>
+  var btn = document.getElementById('install');
+  var chromeBtn = document.getElementById('chrome');
+  var steps = document.getElementById('steps');
+  var stepsTitle = document.getElementById('stepsTitle');
+  var stepsList = document.getElementById('stepsList');
+  var done = document.getElementById('done');
+
+  var ua = navigator.userAgent;
+  var isAndroid = /Android/i.test(ua);
+  var isChrome = /Chrome\/\d+/i.test(ua) && !/YaBrowser|Edg|OPR|SamsungBrowser/i.test(ua);
+  var isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+
+  var deferred = null;
+
+  if (isAndroid && !isChrome) {
+    chromeBtn.style.display = 'flex';
+    chromeBtn.href = 'intent://' + location.host + location.pathname.replace(/install\.html$/, '') +
+      '#Intent;scheme=https;package=com.android.chrome;end';
+  }
+
+  function fillSteps() {
+    stepsTitle.textContent = isIOS ? 'На iPhone — через Safari' : 'Как установить';
+    stepsList.innerHTML = isIOS
+      ? '<li>Откройте эту страницу в Safari</li><li>Нажмите «Поделиться» внизу экрана</li><li>Выберите «На экран «Домой»»</li>'
+      : '<li>Откройте страницу в Chrome</li><li>Меню ⋮ справа вверху → «Установить приложение»</li><li>Подтвердите установку</li>';
+    steps.style.display = 'block';
+  }
+
+  if (standalone) { btn.style.display = 'none'; done.style.display = 'block'; }
+
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; });
+  window.addEventListener('appinstalled', function () {
+    btn.style.display = 'none'; steps.style.display = 'none'; done.style.display = 'block';
+  });
+
+  btn.addEventListener('click', function () {
+    if (deferred) {
+      deferred.prompt();
+      if (deferred.userChoice) deferred.userChoice.then(function () { deferred = null; });
+      return;
+    }
+    fillSteps();
+  });
+
+  setTimeout(function () { if (!deferred && !standalone) fillSteps(); }, 1800);
+</script>
+</body>
+</html>

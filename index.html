@@ -902,6 +902,19 @@ window.addEventListener('hashchange',()=>{render();window.scrollTo(0,0);});
 load();
 render();
 })();</script>
-<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<script>
+if('serviceWorker' in navigator){
+  var hadController = !!navigator.serviceWorker.controller;
+  var reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', function(){
+    if(!hadController || reloaded) return;
+    reloaded = true;
+    location.reload();
+  });
+  addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){ if(reg.update) reg.update(); }).catch(function(){});
+  });
+}
+</script>
 </body>
 </html>

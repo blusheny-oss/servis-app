@@ -252,7 +252,7 @@ const KEY='priemka.v2', KEY_OLD='priemka.v1';
 const ZONES_OLD={front:'Передний бампер',hood:'Капот',left:'Левый борт',roof:'Крыша',right:'Правый борт',rear:'Задний бампер',glass:'Стёкла',wheels:'Диски и шины',salon:'Салон'};
 const ACT_NOTE='Владелец подтверждает, что перечисленные повреждения зафиксированы при приёмке автомобиля, до начала работ. Стоимость запчастей указана предварительно и уточняется после дефектовки.';
 
-let S=null, draftPhotos=[];
+let S=null, draftPhotos=[], statsMonth=null, statsDay=null;
 
 /* ================= photo store ================= */
 const PhotoDB=(()=>{let p=null;
@@ -312,6 +312,7 @@ const allParts=()=>{const set={};S.cars.forEach(c=>itemsOf(c).forEach(i=>{if(i.p
 const IC={
   home:'<svg viewBox="0 0 24 24"><path d="M3 17h18l-1.4-4.3A2 2 0 0 0 17.7 11H6.3a2 2 0 0 0-1.9 1.7L3 17Z"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17" cy="17.5" r="1.6"/></svg>',
   list:'<svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>',
+  chart:'<svg viewBox="0 0 24 24"><path d="M5 19V9M12 19V5M19 19v-6"/></svg>',
   gear:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.2A1.6 1.6 0 0 0 7 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 13.9H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3.1V3a2 2 0 1 1 4 0v.2a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.2a1.6 1.6 0 0 0-1.4 1.1Z"/></svg>',
   plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
   back:'<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>'
@@ -323,6 +324,7 @@ function tabbar(tab){
    +'<a href="#/" class="'+(tab==='home'?'on':'')+'">'+IC.home+'<span>Осмотры</span></a>'
    +'<a href="#/cars" class="'+(tab==='cars'?'on':'')+'">'+IC.list+'<span>Машины</span></a>'
    +'<a href="#" data-act="new-car" class="mid '+(tab==='new'?'on':'')+'"><span class="dot">'+IC.plus+'</span><span>Приём машины</span></a>'
+   +'<a href="#/stats" class="'+(tab==='stats'?'on':'')+'">'+IC.chart+'<span>Статистика</span></a>'
    +'<a href="#/settings" class="'+(tab==='set'?'on':'')+'">'+IC.gear+'<span>Ещё</span></a>'
    +'</div></nav>';
 }
@@ -333,6 +335,7 @@ function render(){
   else if(parts[0]==='signed'){html=vSigned();}
   else if(parts[0]==='cars'){html=vCars();tab='cars';}
   else if(parts[0]==='c'){html=vCar(parts[1]);tab='cars';}
+  else if(parts[0]==='stats'){html=vStats();tab='stats';}
   else if(parts[0]==='settings'){html=vSettings();tab='set';}
   else{html='<div class="empty"><h3>Не найдено</h3><p>Такой страницы нет.</p><a class="btn sm primary" href="#/">На осмотры</a></div>';}
   $('#app').innerHTML=html+tabbar(tab);
@@ -457,15 +460,83 @@ function vCar(id){
     h+='<button class="btn ghost" data-act="reopen" data-id="'+c.id+'">Вернуть в работу</button>';
   }
   h+='</div>';
-  if(c.signedAt)h+='<div class="hint" style="margin-top:10px">Акт приёма подписан '+dtm(c.signedAt)+(c.sig&&c.sig.name?' · '+esc(c.sig.name):'')+'</div>';
-  if(c.handAt)h+='<div class="hint" style="margin-top:4px">Выдана '+dtm(c.handAt)+(c.handSig&&c.handSig.name?' · '+esc(c.handSig.name):'')+'</div>';
+  if(c.signedAt)h+='<div class="hint" style="margin-top:10px">Акт приёма подписан владельцем '+dtm(c.signedAt)+' (на бумаге)</div>';
+  if(c.handAt)h+='<div class="hint" style="margin-top:4px">Выдана '+dtm(c.handAt)+'</div>';
 
   h+='<div class="dock"><div class="inner"><div class="card"><div><div class="sum">'+money(sum)+'</div>'
    +'<div class="cnt">'+cnt+' '+plur(cnt,'позиция','позиции','позиций')+' · без работы мастера</div></div>'
    +(c.status==='draft'
-      ?'<button class="btn primary sm" data-act="sign" data-id="'+c.id+'">Подписать акт</button>'
+      ?'<button class="btn primary sm" data-act="sign" data-id="'+c.id+'">Акт подписан</button>'
       :(c.status==='signed'?'<button class="btn primary sm" data-act="hand" data-id="'+c.id+'">Выдать</button>':''))
    +'</div></div></div>';
+  return h;
+}
+const ymKey=ts=>{const d=new Date(ts);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');};
+const ymdKey=ts=>ymKey(ts)+'-'+String(new Date(ts).getDate()).padStart(2,'0');
+function monthStats(month){
+  const days={};
+  const get=d=>days[d]||(days[d]={acc:0,accSum:0,sig:0,hand:0,handSum:0});
+  S.cars.forEach(c=>{
+    if(c.createdAt&&ymKey(c.createdAt)===month){const d=ymdKey(c.createdAt);get(d).acc++;get(d).accSum+=partsSum(c);}
+    if(c.signedAt&&ymKey(c.signedAt)===month){get(ymdKey(c.signedAt)).sig++;}
+    if(c.closedAt&&ymKey(c.closedAt)===month){const d=ymdKey(c.closedAt);get(d).hand++;get(d).handSum+=partsSum(c)+laborSum(c);}
+  });
+  return days;
+}
+function dayEvents(day){
+  const out=[];
+  S.cars.forEach(c=>{
+    if(c.createdAt&&ymdKey(c.createdAt)===day)out.push({t:c.createdAt,kind:'Принята',c});
+    if(c.signedAt&&ymdKey(c.signedAt)===day)out.push({t:c.signedAt,kind:'Подписан акт',c});
+    if(c.closedAt&&ymdKey(c.closedAt)===day)out.push({t:c.closedAt,kind:'Выдана',c});
+  });
+  return out.sort((a,b)=>a.t-b.t);
+}
+function vStats(){
+  const now=new Date();
+  if(!statsMonth)statsMonth=ymKey(now.getTime());
+  if(!statsDay)statsDay=ymdKey(now.getTime());
+  const days=monthStats(statsMonth);
+  const keys=Object.keys(days).sort();
+  const tot={acc:0,accSum:0,sig:0,hand:0,handSum:0};
+  keys.forEach(k=>{const d=days[k];tot.acc+=d.acc;tot.accSum+=d.accSum;tot.sig+=d.sig;tot.hand+=d.hand;tot.handSum+=d.handSum;});
+
+  let h='<div class="h1" style="margin-top:14px">Статистика</div>';
+  h+='<div class="field" style="margin:12px 0 10px"><label for="st_month">Месяц</label><input id="st_month" type="month" value="'+statsMonth+'"></div>';
+  h+='<div class="meta-grid">'
+   +'<div class="meta"><div class="k">Принято машин</div><div class="v">'+tot.acc+'</div></div>'
+   +'<div class="meta"><div class="k">Запчасти по ним</div><div class="v">'+money(tot.accSum)+'</div></div>'
+   +'<div class="meta"><div class="k">Подписано актов</div><div class="v">'+tot.sig+'</div></div>'
+   +'<div class="meta"><div class="k">Выдано машин</div><div class="v">'+tot.hand+'</div></div>'
+   +'<div class="meta" style="grid-column:1/-1"><div class="k">Выдано на сумму (запчасти + работа)</div><div class="v">'+money(tot.handSum)+'</div></div>'
+   +'</div>';
+
+  h+='<div class="section"><div class="section-head"><h2>По дням</h2><span class="dim">'+keys.length+'</span></div>';
+  h+=keys.length
+    ? '<div class="list">'+keys.map(k=>{
+        const d=days[k], parts=[];
+        if(d.acc)parts.push('принято '+d.acc);
+        if(d.sig)parts.push('подписано '+d.sig);
+        if(d.hand)parts.push('выдано '+d.hand);
+        const dt=new Date(k+'T12:00:00').getTime();
+        return '<div class="item" data-act="stat-day" data-d="'+k+'">'
+          +'<div class="item-row"><div class="plate" style="font-size:15px">'+dmy(dt)+'</div>'
+          +'<div class="amount" style="font-size:14px">'+(d.handSum?money(d.handSum):(d.accSum?money(d.accSum):'—'))+'</div></div>'
+          +'<div class="sub">'+parts.join(' · ')+'</div></div>';
+      }).join('')+'</div>'
+    : '<div class="empty"><h3>За этот месяц пусто</h3><p>Ни приёмок, ни подписаний, ни выдач.</p></div>';
+  h+='</div>';
+
+  const ev=dayEvents(statsDay);
+  h+='<div class="section"><div class="section-head"><h2>Любой день</h2></div>'
+   +'<div class="field"><input id="st_day" type="date" value="'+statsDay+'"></div>';
+  h+=ev.length
+    ? '<div class="list">'+ev.map(e=>'<div class="item" role="button" tabindex="0" data-act="go" data-to="#/c/'+e.c.id+'">'
+        +'<div class="item-row"><div class="plate" style="font-size:15px">'+esc(e.c.plate||'без номера')+'</div>'
+        +'<div class="amount" style="font-size:14px">'+money(partsSum(e.c))+'</div></div>'
+        +'<div class="sub">'+e.kind+' · '+new Date(e.t).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})+' · '+esc(e.c.model||'')+'</div></div>').join('')+'</div>'
+    : '<div class="hint">В этот день ничего не было.</div>';
+  h+='</div>';
   return h;
 }
 function vSettings(){
@@ -477,8 +548,6 @@ function vSettings(){
    +'<button class="btn primary block" data-act="save-me">Сохранить</button></div>';
   h+='<div class="section"><div class="section-head"><h2>Данные</h2></div>'
    +'<div class="hint" style="margin-bottom:10px">Всё хранится на этом телефоне. Фото лежат в приложении и в галерею не попадают.</div>'
-   +'<div class="actions" style="margin-top:0"><button class="btn ghost" data-act="export">Скачать копию</button>'
-   +'<button class="btn ghost" data-act="import">Загрузить копию</button></div>'
    +'<button class="btn danger block" style="margin-top:10px" data-act="reset">Удалить все машины</button></div>';
   h+='<div class="hint" style="margin-top:16px;text-align:center">Сервис · приёмка автомобилей</div>';
   return h;
@@ -634,49 +703,23 @@ function compress(file,maxW=1400,quality=.72){
   });
 }
 
-function signSheet(cid,kind){
+function confirmSheet(cid,kind){
   const c=car(cid);if(!c)return;
   const isHand=kind==='handover';
-  const sum=partsSum(c);
   const body='<p class="hint" style="margin-bottom:12px">'
-      + (isHand?'Владелец принимает выполненные работы и подтверждает, что претензий по объёму и качеству нет.'
-               :'Владелец подтверждает, что перечисленные повреждения зафиксированы до начала работ.')
+      +(isHand?'Работы сданы, машина выдана. Отметьте это в приложении — подписи ставятся от руки на распечатанном акте.'
+              :'Подписи ставятся от руки на распечатанном акте. Отметьте в приложении, что владелец подписал.')
       +'</p>'
-      +'<div class="card" style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:12px">'
+      +'<div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 13px">'
       +'<div style="font-weight:800">'+esc(c.plate)+' · '+esc(c.model||'')+'</div>'
       +'<div class="hint">'+itemsOf(c).length+' '+plur(itemsOf(c).length,'позиция','позиции','позиций')
-      +' · запчасти '+money(sum)+(isHand?' · работа '+money(laborSum(c)):'')+'</div></div>'
-      +'<div class="field"><label for="s_name">ФИО владельца</label><input id="s_name" value="'+esc((c.sig&&c.sig.name)||c.owner||'')+'" placeholder="Сергей Петров"></div>'
-      +'<div class="sigwrap"><canvas id="sigpad"></canvas><div class="sigline"><span>подпись владельца</span><span id="sigclear" style="cursor:pointer">очистить</span></div></div>'
-      +'<div class="hint" style="margin-top:10px">Мастер: '+esc(S.me.name||'—')+'</div>';
+      +' · запчасти '+money(partsSum(c))+(isHand?' · работа '+money(laborSum(c)):'')+'</div></div>';
   openSheet({
-    title:isHand?'Выдача машины':'Подпись владельца',
+    title:isHand?'Выдача машины':'Акт подписан',
     body,
-    foot:'<button class="btn ghost" data-act="close-sheet">Отмена</button><button class="btn primary" id="s_save">'+(isHand?'Выдать':'Подписать')+'</button>',
-    onMount:(bd,close)=>{
-      const cv=$('#sigpad',bd),ctx=cv.getContext('2d');
-      const dpr=Math.min(window.devicePixelRatio||1,2);
-      const r=cv.getBoundingClientRect();
-      cv.width=Math.round((r.width||300)*dpr);cv.height=Math.round((r.height||160)*dpr);
-      ctx.setTransform(dpr,0,0,dpr,0,0);ctx.lineWidth=2.2;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#111';
-      let drawing=false,dirty=false;
-      const pos=e=>{const rr=cv.getBoundingClientRect();return{x:e.clientX-rr.left,y:e.clientY-rr.top};};
-      cv.addEventListener('pointerdown',e=>{e.preventDefault();drawing=true;const p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);try{cv.setPointerCapture(e.pointerId);}catch(_){}} );
-      cv.addEventListener('pointermove',e=>{if(!drawing)return;e.preventDefault();const p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();dirty=true;});
-      cv.addEventListener('pointerup',()=>{drawing=false;});
-      cv.addEventListener('pointercancel',()=>{drawing=false;});
-      $('#sigclear',bd).onclick=()=>{ctx.clearRect(0,0,cv.width,cv.height);dirty=false;};
-      $('#s_save').onclick=()=>{
-        if(!dirty){toast('Сначала поставьте подпись');return;}
-        const name=$('#s_name',bd).value.trim();
-        if(!name){$('#s_name',bd).classList.add('err');$('#s_name',bd).focus();return;}
-        const sig={name,at:Date.now(),data:cv.toDataURL('image/png')};
-        if(isHand){c.handSig=sig;c.handAt=Date.now();c.status='closed';c.closedAt=Date.now();}
-        else{c.sig=sig;c.signedAt=Date.now();c.status='signed';}
-        save();close();render();
-        toast(isHand?'Машина выдана':'Акт подписан · машина в «Подписан»');
-      };
-    }
+    foot:'<button class="btn ghost" data-act="close-sheet">Отмена</button>'
+      +'<button class="btn primary" data-act="'+(isHand?'confirm-hand':'confirm-act')+'" data-id="'+c.id+'">'
+      +(isHand?'Выдать машину':'Отметить подписанным')+'</button>'
   });
 }
 
@@ -705,8 +748,8 @@ function printAccept(cid){
       :'<div style="font-size:9.5pt;padding:6px 0">Неисправностей не зафиксировано.</div>')
    +'<div class="note">'+ACT_NOTE+'</div>'
    +'<div class="signs">'
-   +'<div><div class="ln"></div><div class="cap"><span>Сдал (владелец)</span><span>'+esc((c.sig&&c.sig.name)||c.owner||'')+'</span></div></div>'
-   +'<div><div class="ln">'+((c.sig&&c.sig.data)?'<img src="'+c.sig.data+'" alt="">':'')+'</div><div class="cap"><span>Принял (сервис)</span><span>'+esc(S.me.name||'')+'</span></div></div>'
+   +'<div><div class="ln"></div><div class="cap"><span>Сдал (владелец)</span><span>'+esc(c.owner||'')+'</span></div></div>'
+   +'<div><div class="ln"></div><div class="cap"><span>Принял (сервис)</span><span>'+esc(S.me.name||'')+'</span></div></div>'
    +'</div></div>';
   $('#printRoot').innerHTML=html;
   setTimeout(()=>window.print(),80);
@@ -728,7 +771,7 @@ function printHand(cid){
    +'<div class="totals"><div>Запчасти<b>'+money(partsSum(c))+'</b></div><div>Работа мастера<b>'+money(laborSum(c))+'</b></div><div>Всего<b>'+money(partsSum(c)+laborSum(c))+'</b></div></div>'
    +'<div class="note">Владелец подтверждает, что работы выполнены в полном объёме, претензий по объёму и качеству не имеет.</div>'
    +'<div class="signs">'
-   +'<div><div class="ln">'+((c.handSig&&c.handSig.data)?'<img src="'+c.handSig.data+'" alt="">':'')+'</div><div class="cap"><span>Принял (владелец)</span><span>'+esc((c.handSig&&c.handSig.name)||c.owner||'')+'</span></div></div>'
+   +'<div><div class="ln"></div><div class="cap"><span>Принял (владелец)</span><span>'+esc(c.owner||'')+'</span></div></div>'
    +'<div><div class="ln"></div><div class="cap"><span>Сдал (сервис)</span><span>'+esc(S.me.name||'')+'</span></div></div>'
    +'</div></div>';
   $('#printRoot').innerHTML=html;
@@ -846,13 +889,24 @@ document.addEventListener('click',e=>{
       renderDraftPhotos($('#i_photos'));
       break;
     }
-    case 'sign': signSheet(el.dataset.id,'accept'); break;
+    case 'sign': confirmSheet(el.dataset.id,'accept'); break;
     case 'hand': {
       const c=car(el.dataset.id);if(!c)break;
-      if(!c.signedAt){toast('Сначала подпишите акт приёма');break;}
-      signSheet(el.dataset.id,'handover');break;
+      if(!c.signedAt){toast('Сначала отметьте подписанный акт приёма');break;}
+      confirmSheet(el.dataset.id,'handover');break;
+    }
+    case 'confirm-act': {
+      const c=car(el.dataset.id);if(!c)break;
+      c.signedAt=Date.now();c.status='signed';c.sig=null;
+      save();closeTop();render();toast('Акт подписан · машина в «Подписан»');break;
+    }
+    case 'confirm-hand': {
+      const c=car(el.dataset.id);if(!c)break;
+      c.handAt=Date.now();c.status='closed';c.closedAt=Date.now();c.handSig=null;
+      save();closeTop();render();toast('Машина выдана');break;
     }
     case 'reopen': {const c=car(el.dataset.id);if(!c)break;c.status=c.signedAt?'signed':'draft';c.closedAt=null;c.handAt=null;c.handSig=null;save();render();toast('Возвращено в работу');break;}
+    case 'stat-day': {statsDay=el.dataset.d;location.hash='#/stats';render();break;}
     case 'print-accept': printAccept(el.dataset.id); break;
     case 'print-hand': printHand(el.dataset.id); break;
     case 'share': {const c=car(el.dataset.id);if(c)shareSheet(carText(c));break;}
@@ -862,23 +916,6 @@ document.addEventListener('click',e=>{
       break;
     }
     case 'save-me': S.me.name=$('#m_name').value.trim();S.me.phone=$('#m_phone').value.trim();save();render();toast('Сохранено');break;
-    case 'export': {
-      const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
-      const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-      a.download='servis-'+new Date().toISOString().slice(0,10)+'.json';a.click();
-      setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('Копия скачана');break;
-    }
-    case 'import': {
-      const inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json';
-      inp.onchange=async()=>{
-        const f=inp.files&&inp.files[0];if(!f)return;
-        try{const d=JSON.parse(await f.text());if(!Array.isArray(d.cars))throw new Error('bad');
-          S=Object.assign(blank(),d);S.groups=S.groups&&S.groups.length?S.groups:GROUPS.slice();
-          S.me=Object.assign({name:'',phone:''},d.me||{});save();render();toast('Данные загружены');
-        }catch(err){toast('Файл не подошёл');}
-      };
-      inp.click();break;
-    }
     case 'reset': {
       if(!confirm('Удалить все машины с этого телефона?'))break;
       S=blank();save();location.hash='#/';render();toast('Всё очищено');break;
@@ -887,6 +924,8 @@ document.addEventListener('click',e=>{
 });
 
 document.addEventListener('input',e=>{
+  if(e.target&&e.target.id==='st_month'){statsMonth=e.target.value;render();return;}
+  if(e.target&&e.target.id==='st_day'){statsDay=e.target.value;render();return;}
   if(e.target&&e.target.id==='q'){
     const q=e.target.value.trim().toLowerCase();
     $$('#carsList .item').forEach(it=>{
